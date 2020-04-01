@@ -12,6 +12,8 @@ import (
 	"github.com/freerware/negotiator/reactive"
 	"github.com/freerware/negotiator/representation"
 	"github.com/stretchr/testify/suite"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 )
 
 type ReactiveTestSuite struct {
@@ -28,6 +30,8 @@ func TestReactiveTestSuite(t *testing.T) {
 func (s *ReactiveTestSuite) SetupTest() {
 	s.sut = reactive.New(
 		reactive.Representation(json.List),
+		reactive.Scope(tally.NoopScope),
+		reactive.Logger(zap.NewNop()),
 	)
 }
 
