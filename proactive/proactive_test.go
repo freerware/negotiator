@@ -16,6 +16,8 @@ import (
 	"github.com/freerware/negotiator/representation"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
+	"github.com/uber-go/tally"
+	"go.uber.org/zap"
 )
 
 type ProactiveTestSuite struct {
@@ -39,6 +41,8 @@ func (s *ProactiveTestSuite) SetupTest() {
 	s.sut = proactive.New(
 		proactive.Algorithm(s.chooser),
 		proactive.Representations(json.List),
+		proactive.Scope(tally.NoopScope),
+		proactive.Logger(zap.NewNop()),
 	)
 }
 
