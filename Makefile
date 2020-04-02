@@ -21,8 +21,7 @@ test: bins
 		github.com/freerware/negotiator/proactive \
 		github.com/freerware/negotiator/reactive \
 		github.com/freerware/negotiator/transparent \
-		github.com/freerware/negotiator/representation \
-		github.com/freerware/negotiator \
+		github.com/freerware/negotiator/representation
 
 	@echo done!
 
