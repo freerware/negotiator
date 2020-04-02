@@ -17,8 +17,10 @@ package transparent
 
 import (
 	"errors"
+	"fmt"
 	"math"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 
@@ -168,16 +170,60 @@ func (n Negotiator) Negotiate(
 		}
 	}
 
+	//https://tools.ietf.org/html/rfc2068#section-3.2.3
+	sameURL := func(one, two url.URL) bool {
+		normalizePort := func(u url.URL) url.URL {
+			if u.Port() == "" {
+				u.Host = fmt.Sprintf("%s:%d", u.Hostname(), 80)
+			}
+			return u
+		}
+		normalizePath := func(u url.URL) url.URL {
+			if u.Path == "" {
+				u.Path = "/"
+			}
+			return u
+		}
+		normalizeScheme := func(u url.URL) url.URL {
+			u.Scheme = strings.ToLower(u.Scheme)
+			return u
+		}
+		normalizeHostName := func(u url.URL) url.URL {
+			u.Host = strings.ToLower(u.Host)
+			return u
+		}
+		normalize := func(u url.URL) url.URL {
+			normalizers := []func(url.URL) url.URL{
+				normalizeHostName,
+				normalizePath,
+				normalizePort,
+				normalizeScheme,
+			}
+			for _, n := range normalizers {
+				u = n(u)
+			}
+			return u
+		}
+		o, t := normalize(one), normalize(two)
+		return (&o).String() == (&t).String()
+	}
+
 	//https://tools.ietf.org/html/rfc2296#section-3.5
+	isNeighbor := func(neighborURL, resourceURL url.URL) bool {
+		trim := func(u url.URL) url.URL {
+			if lastSlash := strings.LastIndex(u.Path, "/"); lastSlash != -1 {
+				u.Path = u.Path[:lastSlash]
+			}
+			return u
+		}
+		return sameURL(trim(neighborURL), trim(resourceURL))
+	}
+
 	loc := rep.ContentLocation()
-	neighborURL := strings.TrimRight(loc.String(), "/")
-	resourceURL := strings.TrimRight(ctx.Request.URL.String(), "/")
-	nLastSlash := strings.LastIndex(neighborURL, "/")
-	rLastSlash := strings.LastIndex(resourceURL, "/")
-	if nLastSlash == -1 || rLastSlash == -1 || nLastSlash != rLastSlash {
+	if !isNeighbor(loc, *ctx.Request.URL) {
 		n.logger.Debug("variant resource is not a neighbor of the negotiable resource",
-			zap.String("resource-url", resourceURL),
-			zap.String("neighbor-url", neighborURL))
+			zap.String("resource-url", ctx.Request.URL.String()),
+			zap.String("neighbor-url", loc.String()))
 		return n.listResponse(ctx, reps...)
 	}
 	return n.choiceResponse(ctx, reps, rep)
