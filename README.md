@@ -41,7 +41,7 @@ There are many reasons why you should leave your HTTP content negotiation to us:
 http.HandleFunc("/foo", func(rw http.ResponseWriter, r *http.Request) {
 
 	// gather representations.
-	representations := []representation.Representation { Foo { ID: 1 }  }
+	representations := []representation.Representation { Foo { ID: 1 } }
 
 	// choose a negotiator.
 	p := proactive.Default
@@ -201,17 +201,17 @@ tn := transparent.New(
 
 | Name                                   | Tag                     | Type      | Description                                                  |
 | -------------------------------------- | ----------------------- | --------- | ------------------------------------------------------------ |
-| [_PREFIX._].negotiate                  | negotiator: proactive   | timer     | The time spent during proactive negotiation.                 |
-| [_PREFIX._].negotiate                  | negotiator: reactive    | timer     | The time spent during reactive negotiation.                  |
-| [_PREFIX._].negotiate                  | negotiator: transparent | timer     | The time spent during transparent negotiation.               |
-| [_PREFIX._].negotiate.no_content       | negotiator: proactive   | counter   | The count of proactive negotiation resulting in HTTP 204.    |
-| [_PREFIX._].negotiate.no_content       | negotiator: reactive    | counter   | The count of reactive negotiation resulting in HTTP 204.     |
-| [_PREFIX._].negotiate.error            | negotiator: proactive   | counter   | The count of proactive negotiation resulting in an error.    |
-| [_PREFIX._].negotiate.error            | negotiator: reactive    | counter   | The count of reactive negotiation resulting in an error.     |
-| [_PREFIX._].negotiate.error            | negotiator: transparent | counter   | The count of transparent negotiation resulting in an error.  |
-| [_PREFIX._].negotiate.multiple_choices | negotiator: reactive    | counter   | The count of reactive negotiation resulting in HTTP 302.     |
-| [_PREFIX._].negotiate.acceptable       | negotiator: proactive   | counter   | The count of reactive negotiation resulting in HTTP 200.     |
-| [_PREFIX._].negotiate.not_acceptable   | negotiator: proactive   | counter   | The count of reactive negotiation resulting in HTTP 406.     |
+| [_PREFIX._]negotiate                  | negotiator: proactive   | timer     | The time spent during proactive negotiation.                 |
+| [_PREFIX._]negotiate                  | negotiator: reactive    | timer     | The time spent during reactive negotiation.                  |
+| [_PREFIX._]negotiate                  | negotiator: transparent | timer     | The time spent during transparent negotiation.               |
+| [_PREFIX._]negotiate.no_content       | negotiator: proactive   | counter   | The count of proactive negotiation resulting in HTTP 204.    |
+| [_PREFIX._]negotiate.no_content       | negotiator: reactive    | counter   | The count of reactive negotiation resulting in HTTP 204.     |
+| [_PREFIX._]negotiate.error            | negotiator: proactive   | counter   | The count of proactive negotiation resulting in an error.    |
+| [_PREFIX._]negotiate.error            | negotiator: reactive    | counter   | The count of reactive negotiation resulting in an error.     |
+| [_PREFIX._]negotiate.error            | negotiator: transparent | counter   | The count of transparent negotiation resulting in an error.  |
+| [_PREFIX._]negotiate.multiple_choices | negotiator: reactive    | counter   | The count of reactive negotiation resulting in HTTP 302.     |
+| [_PREFIX._]negotiate.acceptable       | negotiator: proactive   | counter   | The count of reactive negotiation resulting in HTTP 200.     |
+| [_PREFIX._]negotiate.not_acceptable   | negotiator: proactive   | counter   | The count of reactive negotiation resulting in HTTP 406.     |
 
 ## Contribute
 
