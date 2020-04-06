@@ -50,3 +50,6 @@ There are many reasons why you should leave your HTTP content negotiation to us:
 [license-img]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 [release]: https://github.com/freerware/negotiator/releases
 [release-img]: https://img.shields.io/github/tag/freerware/negotiator.svg?label=version
+[rfc2295]: https://tools.ietf.org/html/rfc2295
+[rfc7231-3.4.1]: https://tools.ietf.org/html/rfc7231#section-3.4.1
+[rfc7231-3.4.2]: https://tools.ietf.org/html/rfc7231#section-3.4.2
