@@ -25,6 +25,9 @@ import (
 func List(reps ...representation.Representation) representation.Representation {
 	list := _representation.List{}
 	list.SetContentType("application/json")
+	list.SetContentCharset("ascii")
+	list.SetContentEncoding([]string{"identity"})
+	list.SetContentLanguage("en-US")
 	list.SetRepresentations(reps...)
 	return list
 }
