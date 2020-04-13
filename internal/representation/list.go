@@ -50,6 +50,7 @@ func (l *List) SetRepresentations(reps ...rep.Representation) {
 			ContentLocation: (&loc).String(),
 			ContentCharset:  rep.ContentCharset(),
 			ContentFeatures: rep.ContentFeatures(),
+			SourceQuality:   rep.SourceQuality(),
 		})
 	}
 }
