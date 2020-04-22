@@ -8,8 +8,6 @@ import (
 
 	"github.com/freerware/negotiator"
 	_representation "github.com/freerware/negotiator/internal/representation"
-	"github.com/freerware/negotiator/internal/representation/json"
-	"github.com/freerware/negotiator/internal/representation/xml"
 	"github.com/freerware/negotiator/internal/test"
 	"github.com/freerware/negotiator/internal/test/mock"
 	"github.com/freerware/negotiator/proactive"
@@ -18,6 +16,28 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+)
+
+var (
+	jsonList = func(reps ...representation.Representation) representation.Representation {
+		list := representation.List{}
+		list.SetContentType("application/json")
+		list.SetContentCharset("ascii")
+		list.SetContentEncoding([]string{"identity"})
+		list.SetContentLanguage("en-US")
+		list.SetRepresentations(reps...)
+		return &list
+	}
+
+	xmlList = func(reps ...representation.Representation) representation.Representation {
+		list := representation.List{}
+		list.SetContentType("application/xml")
+		list.SetContentCharset("ascii")
+		list.SetContentEncoding([]string{"identity"})
+		list.SetContentLanguage("en-US")
+		list.SetRepresentations(reps...)
+		return &list
+	}
 )
 
 type ProactiveTestSuite struct {
@@ -40,7 +60,7 @@ func (s *ProactiveTestSuite) SetupTest() {
 	s.chooser = mock.NewChooser(s.mc)
 	s.sut = proactive.New(
 		proactive.Algorithm(s.chooser),
-		proactive.Representations(json.List),
+		proactive.Representations(jsonList),
 		proactive.Scope(tally.NoopScope),
 		proactive.Logger(zap.NewNop()),
 	)
@@ -108,10 +128,10 @@ func (s ProactiveTestSuite) TestProactive_StrictMode_MissingAccept() {
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -143,10 +163,10 @@ func (s ProactiveTestSuite) TestProactive_AcceptStrictModeDisabled_MissingAccept
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -180,10 +200,10 @@ func (s ProactiveTestSuite) TestProactive_StrictMode_NoMatchesForAccept() {
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -217,10 +237,10 @@ func (s ProactiveTestSuite) TestProactive_AcceptStrictModeDisabled_NoMatchesForA
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -279,10 +299,10 @@ func (s ProactiveTestSuite) TestProactive_StrictMode_MissingAcceptLanguage() {
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -314,10 +334,10 @@ func (s ProactiveTestSuite) TestProactive_AcceptLanguageStrictModeDisabled_Missi
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -350,10 +370,10 @@ func (s ProactiveTestSuite) TestProactive_StrictMode_NoMatchesForAcceptLanguage(
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -386,10 +406,10 @@ func (s ProactiveTestSuite) TestProactive_AcceptLanguageStrictModeDisabled_NoMat
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -449,10 +469,10 @@ func (s ProactiveTestSuite) TestProactive_StrictMode_MissingAcceptCharset() {
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -484,10 +504,10 @@ func (s ProactiveTestSuite) TestProactive_AcceptCharsetStrictModeDisableld_Missi
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -521,10 +541,10 @@ func (s ProactiveTestSuite) TestProactive_StrictMode_NoMatchesForAcceptCharset()
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -558,10 +578,10 @@ func (s ProactiveTestSuite) TestProactive_AcceptCharsetStrictModeDisabled_NoMatc
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
-	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jsonList, nil)
+	s.chooser.EXPECT().Choose(ctx.Request, gomock.Any()).Return(jList, nil)
 
 	// action.
 	err := s.sut.Negotiate(ctx, variants...)
@@ -594,8 +614,8 @@ func (s ProactiveTestSuite) TestProactive_NotAcceptable() {
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	jsonList := json.List(variants...)
-	expectedBytes, _ := jsonList.Bytes()
+	jList := jsonList(variants...)
+	expectedBytes, _ := jList.Bytes()
 	expectedLen := len(expectedBytes)
 	s.chooser.
 		EXPECT().
@@ -605,7 +625,7 @@ func (s ProactiveTestSuite) TestProactive_NotAcceptable() {
 	s.chooser.
 		EXPECT().
 		Choose(ctx.Request, gomock.Any()).
-		Return(jsonList, nil).
+		Return(jList, nil).
 		Times(1)
 
 	// action.
@@ -665,7 +685,7 @@ func (s ProactiveTestSuite) TestProactive_NotAcceptable_DefaultRepresentation() 
 	s.sut = proactive.New(
 		proactive.Algorithm(s.chooser),
 		proactive.DisableStrictMode(),
-		proactive.DefaultRepresentation(xml.List),
+		proactive.DefaultRepresentation(xmlList),
 	)
 	_json, english, ascii, gzip := "application/json", "en-US", "ascii", "gzip"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
@@ -685,8 +705,8 @@ func (s ProactiveTestSuite) TestProactive_NotAcceptable_DefaultRepresentation() 
 		WithSourceQuality(1.0).
 		Build(test.RepresentationBuilderFunc)
 	variants := []representation.Representation{v}
-	xmlList := xml.List(variants...)
-	expectedBytes, _ := xmlList.Bytes()
+	xList := xmlList(variants...)
+	expectedBytes, _ := xList.Bytes()
 	expectedLen := len(expectedBytes)
 	s.chooser.
 		EXPECT().
@@ -702,7 +722,7 @@ func (s ProactiveTestSuite) TestProactive_NotAcceptable_DefaultRepresentation() 
 	response := responseWriter.Result()
 	s.Equal(http.StatusNotAcceptable, response.StatusCode)
 	s.Equal(expectedLen, responseWriter.Body.Len())
-	s.Equal(xmlList.ContentType(), response.Header.Get("Content-Type"))
+	s.Equal(xList.ContentType(), response.Header.Get("Content-Type"))
 }
 
 func (s ProactiveTestSuite) TestProactive_NotAcceptable_ChooserError() {

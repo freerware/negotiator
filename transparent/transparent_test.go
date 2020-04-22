@@ -8,7 +8,6 @@ import (
 	"github.com/freerware/negotiator"
 	"github.com/freerware/negotiator/internal/header"
 	_representation "github.com/freerware/negotiator/internal/representation"
-	"github.com/freerware/negotiator/internal/representation/json"
 	"github.com/freerware/negotiator/internal/test"
 	"github.com/freerware/negotiator/internal/test/mock"
 	"github.com/freerware/negotiator/representation"
@@ -17,6 +16,18 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
+)
+
+var (
+	jsonList = func(reps ...representation.Representation) representation.Representation {
+		list := representation.List{}
+		list.SetContentType("application/json")
+		list.SetContentCharset("ascii")
+		list.SetContentEncoding([]string{"identity"})
+		list.SetContentLanguage("en-US")
+		list.SetRepresentations(reps...)
+		return &list
+	}
 )
 
 type TransparentTestSuite struct {
@@ -42,7 +53,7 @@ func (s *TransparentTestSuite) SetupTest() {
 		transparent.MaximumVariantListSize(3),
 		transparent.Scope(tally.NoopScope),
 		transparent.Logger(zap.NewNop()),
-		transparent.ListRepresentation(json.List),
+		transparent.ListRepresentation(jsonList),
 	)
 }
 
