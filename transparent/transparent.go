@@ -26,7 +26,6 @@ import (
 
 	"github.com/freerware/negotiator"
 	"github.com/freerware/negotiator/internal/header"
-	"github.com/freerware/negotiator/internal/representation/json"
 	"github.com/freerware/negotiator/representation"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -64,6 +63,18 @@ var (
 	scopeNameTransparentErrorCounter = "negotiate.error"
 )
 
+var (
+	jsonList = func(reps ...representation.Representation) representation.Representation {
+		list := representation.List{}
+		list.SetContentType("application/json")
+		list.SetContentCharset("ascii")
+		list.SetContentEncoding([]string{"identity"})
+		list.SetContentLanguage("en-US")
+		list.SetRepresentations(reps...)
+		return &list
+	}
+)
+
 // Negotiator represents the negotiator responsible for
 // performing transparent negotiation.
 type Negotiator struct {
@@ -81,7 +92,7 @@ func New(options ...Option) Negotiator {
 	// set defaults.
 	o := Options{
 		MaximumVariantListSize:        10,
-		ListRepresentationConstructor: json.List,
+		ListRepresentationConstructor: jsonList,
 		Chooser:                       RVSA1(),
 		GuessSmallThreshold:           50,
 		Logger:                        zap.NewNop(),

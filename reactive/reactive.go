@@ -21,7 +21,6 @@ import (
 	"strings"
 
 	"github.com/freerware/negotiator"
-	"github.com/freerware/negotiator/internal/representation/json"
 	"github.com/freerware/negotiator/representation"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -47,6 +46,18 @@ var (
 	scopeNameReactiveErrorCounter           = "negotiate.error"
 )
 
+var (
+	jsonList = func(reps ...representation.Representation) representation.Representation {
+		list := representation.List{}
+		list.SetContentType("application/json")
+		list.SetContentCharset("ascii")
+		list.SetContentEncoding([]string{"identity"})
+		list.SetContentLanguage("en-US")
+		list.SetRepresentations(reps...)
+		return &list
+	}
+)
+
 // Negotiator represents the negotiator responsible for performing
 // reactive (agent-driven) negotiation.
 type Negotiator struct {
@@ -60,7 +71,7 @@ type Negotiator struct {
 func New(options ...Option) Negotiator {
 	// set defaults.
 	o := Options{
-		RepresentationConstructor: json.List,
+		RepresentationConstructor: jsonList,
 		Logger:                    zap.NewNop(),
 		Scope:                     tally.NoopScope,
 	}

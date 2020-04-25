@@ -14,9 +14,6 @@ test: bins
 	@echo testing...
 	@GO111MODULE=on go test -covermode=count -coverprofile=coverage.out \
 		github.com/freerware/negotiator/internal/representation \
-		github.com/freerware/negotiator/internal/representation/xml \
-		github.com/freerware/negotiator/internal/representation/json \
-		github.com/freerware/negotiator/internal/representation/yaml \
 		github.com/freerware/negotiator/internal/header \
 		github.com/freerware/negotiator/proactive \
 		github.com/freerware/negotiator/reactive \

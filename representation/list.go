@@ -15,13 +15,9 @@
 
 package representation
 
-import (
-	rep "github.com/freerware/negotiator/representation"
-)
-
 // RepresentationMetadata is the metadata about each representation in the
 // representation list.
-type RepresentationMetadata struct {
+type Metadata struct {
 	ContentType     string   `json:"contentType,omitempty"`
 	ContentLanguage string   `json:"contentLanguage,omitempty"`
 	ContentEncoding []string `json:"contentEncoding,omitempty"`
@@ -34,16 +30,16 @@ type RepresentationMetadata struct {
 // List represents a representation containing a list of descriptions of representations
 // for a particular resource.
 type List struct {
-	rep.Base
+	Base
 
-	Representations []RepresentationMetadata `json:"representations"`
+	Representations []Metadata `json:"representations"`
 }
 
 // SetRepresentations modifies the represention list within the list representation.
-func (l *List) SetRepresentations(reps ...rep.Representation) {
+func (l *List) SetRepresentations(reps ...Representation) {
 	for _, rep := range reps {
 		loc := rep.ContentLocation()
-		l.Representations = append(l.Representations, RepresentationMetadata{
+		l.Representations = append(l.Representations, Metadata{
 			ContentType:     rep.ContentType(),
 			ContentLanguage: rep.ContentLanguage(),
 			ContentEncoding: rep.ContentEncoding(),
@@ -61,6 +57,6 @@ func (l List) Bytes() ([]byte, error) {
 }
 
 // FromBytes constructs the list representation from its serialized form.
-func (l List) FromBytes(b []byte) error {
-	return l.Base.FromBytes(b, &l)
+func (l *List) FromBytes(b []byte) error {
+	return l.Base.FromBytes(b, l)
 }

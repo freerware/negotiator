@@ -22,9 +22,6 @@ import (
 
 	"github.com/freerware/negotiator"
 	"github.com/freerware/negotiator/internal/header"
-	"github.com/freerware/negotiator/internal/representation/json"
-	"github.com/freerware/negotiator/internal/representation/xml"
-	"github.com/freerware/negotiator/internal/representation/yaml"
 	"github.com/freerware/negotiator/representation"
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
@@ -63,6 +60,38 @@ var (
 	scopeNameProactiveErrorCounter         = "negotiate.error"
 )
 
+var (
+	jsonList = func(reps ...representation.Representation) representation.Representation {
+		list := representation.List{}
+		list.SetContentType("application/json")
+		list.SetContentCharset("ascii")
+		list.SetContentEncoding([]string{"identity"})
+		list.SetContentLanguage("en-US")
+		list.SetRepresentations(reps...)
+		return &list
+	}
+
+	xmlList = func(reps ...representation.Representation) representation.Representation {
+		list := representation.List{}
+		list.SetContentType("application/xml")
+		list.SetContentCharset("ascii")
+		list.SetContentEncoding([]string{"identity"})
+		list.SetContentLanguage("en-US")
+		list.SetRepresentations(reps...)
+		return &list
+	}
+
+	yamlList = func(reps ...representation.Representation) representation.Representation {
+		list := representation.List{}
+		list.SetContentType("application/yaml")
+		list.SetContentCharset("ascii")
+		list.SetContentEncoding([]string{"identity"})
+		list.SetContentLanguage("en-US")
+		list.SetRepresentations(reps...)
+		return &list
+	}
+)
+
 // Negotiator represents the negotiator responsible for performing
 // proactive (server-driven) negotiation.
 type Negotiator struct {
@@ -86,14 +115,14 @@ func New(options ...Option) Negotiator {
 		StrictAcceptLanguage:             true,
 		StrictAcceptCharset:              true,
 		NotAcceptableRepresentation:      true,
-		DefaultRepresentationConstructor: json.List,
+		DefaultRepresentationConstructor: jsonList,
 		Chooser:                          ApacheHTTPD(),
 		Logger:                           zap.NewNop(),
 		Scope:                            tally.NoopScope,
 		RepresentationConstructors: []representation.ListConstructor{
-			json.List,
-			xml.List,
-			yaml.List,
+			jsonList,
+			xmlList,
+			yamlList,
 		},
 	}
 	// apply options.
