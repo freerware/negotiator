@@ -19,8 +19,9 @@ description: >- # this means to ignore newlines until "baseurl:"
   A compact library for handling HTTP content negotiation for RESTful APIs.
 baseurl: "negotiator" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+github_username: freerware
+header_pages:
+  - releases.md
 
 # Build settings
 markdown: kramdown
