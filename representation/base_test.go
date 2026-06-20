@@ -139,7 +139,6 @@ func (s *BaseTestSuite) TestBaseRepresentation_Bytes() {
 }
 
 func (s *BaseTestSuite) TestBaseRepresentation_FromBytes() {
-
 	// json representations.
 	identityJSON := representation.Base{}
 	identityJSON.SetContentType("application/json")
@@ -247,7 +246,6 @@ func (s *BaseTestSuite) TestBaseRepresentation_FromBytes() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_ContentType() {
-
 	// arrange.
 	json := "application/json"
 	rep := test.Representation{A: "TEST", B: 28}
@@ -261,7 +259,6 @@ func (s BaseTestSuite) TestBaseRepresentation_ContentType() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetContentType() {
-
 	// arrange.
 	json := "application/json"
 	yaml := "application/yaml"
@@ -272,11 +269,10 @@ func (s BaseTestSuite) TestBaseRepresentation_SetContentType() {
 	rep.SetContentType(yaml)
 
 	// assert.
-	s.Equal(yaml, rep.ContentType())
+	s.YAMLEq(yaml, rep.ContentType())
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_ContentLanguage() {
-
 	// arrange.
 	english := "en-US"
 	rep := test.Representation{A: "TEST", B: 28}
@@ -290,7 +286,6 @@ func (s BaseTestSuite) TestBaseRepresentation_ContentLanguage() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetContentLanguage() {
-
 	// arrange.
 	english := "en-US"
 	british := "en-GB"
@@ -305,7 +300,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetContentLanguage() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_ContentEncoding() {
-
 	// arrange.
 	gzip := "gzip"
 	rep := test.Representation{A: "TEST", B: 28}
@@ -319,7 +313,6 @@ func (s BaseTestSuite) TestBaseRepresentation_ContentEncoding() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetContentEncoding() {
-
 	// arrange.
 	gzip := "gzip"
 	compress := "compress"
@@ -334,7 +327,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetContentEncoding() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_ContentCharset() {
-
 	// arrange.
 	ascii := "ascii"
 	rep := test.Representation{A: "TEST", B: 28}
@@ -348,7 +340,6 @@ func (s BaseTestSuite) TestBaseRepresentation_ContentCharset() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetContentCharset() {
-
 	// arrange.
 	ascii := "ascii"
 	utf8 := "utf8"
@@ -363,7 +354,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetContentCharset() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_ContentLocation() {
-
 	// arrange.
 	loc, _ := url.Parse("http://www.example.com/")
 	rep := test.Representation{A: "TEST", B: 28}
@@ -377,7 +367,6 @@ func (s BaseTestSuite) TestBaseRepresentation_ContentLocation() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetContentLocation() {
-
 	// arrange.
 	loc, _ := url.Parse("http://www.example.com/")
 	newLoc, _ := url.Parse("http://www.example.com/another")
@@ -392,7 +381,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetContentLocation() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_ContentFeatures() {
-
 	// arrange.
 	feature := "foo"
 	rep := test.Representation{A: "TEST", B: 28}
@@ -406,7 +394,6 @@ func (s BaseTestSuite) TestBaseRepresentation_ContentFeatures() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetContentFeatures() {
-
 	// arrange.
 	feature := "foo"
 	newFeature := "bar"
@@ -421,7 +408,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetContentFeatures() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SourceQuality() {
-
 	// arrange.
 	perfect := representation.SourceQualityPerfect
 	rep := test.Representation{A: "TEST", B: 28}
@@ -435,7 +421,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SourceQuality() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetSourceQuality() {
-
 	// arrange.
 	perfect := representation.SourceQualityPerfect
 	nearlyPerfect := representation.SourceQualityNearlyPerfect
@@ -450,7 +435,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetSourceQuality() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetMarshallers() {
-
 	// arrange.
 	testContentType := "text/test"
 	marshaller := func(in interface{}) ([]byte, error) {
@@ -471,7 +455,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetMarshallers() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetUnmarshallers() {
-
 	// arrange.
 	testContentType := "text/test"
 	unmarshaller := func(b []byte, in interface{}) error {
@@ -491,7 +474,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetUnmarshallers() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetEncodingReaders() {
-
 	// arrange.
 	testContentEncoding := "test"
 	reader := func(r io.Reader) (io.ReadCloser, error) {
@@ -509,7 +491,6 @@ func (s BaseTestSuite) TestBaseRepresentation_SetEncodingReaders() {
 }
 
 func (s BaseTestSuite) TestBaseRepresentation_SetEncodingWriters() {
-
 	// arrange.
 	testContentEncoding := "test"
 	writer := func(r io.WriteCloser) (io.WriteCloser, error) {

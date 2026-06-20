@@ -31,38 +31,28 @@ func (t FeatureTag) Equals(tag FeatureTag) bool {
 	if err != nil {
 		return false
 	}
-	q, err := t.quotedASCII()
-	if err != nil {
-		return false
-	}
+	q := t.quotedASCII()
 	uu, err := tag.unquotedASCII()
 	if err != nil {
 		return false
 	}
-	qq, err := tag.quotedASCII()
-	if err != nil {
-		return false
-	}
-	return strings.ToLower(u) == strings.ToLower(uu) ||
-		strings.ToLower(q) == strings.ToLower(qq)
+	qq := tag.quotedASCII()
+	return strings.EqualFold(u, uu) ||
+		strings.EqualFold(q, qq)
 }
 
 // quotedASCII encodes the tag to ASCII and surrounds it with double quotes.
-func (t FeatureTag) quotedASCII() (string, error) {
+func (t FeatureTag) quotedASCII() string {
 	// remove quotes if they exist.
 	u := strings.Trim(t.String(), "\"")
 	// convert to ASCII and quote.
-	return strconv.QuoteToASCII(u), nil
+	return strconv.QuoteToASCII(u)
 }
 
 // unquotedASCII encodes the tag to ASCII and removes surrounding double quotes.
 func (t FeatureTag) unquotedASCII() (string, error) {
-	var q string
-	var err error
 	// convert ASCII and quote.
-	if q, err = t.quotedASCII(); err != nil {
-		return q, err
-	}
+	q := t.quotedASCII()
 	// unquote.
 	return strconv.Unquote(q)
 }
@@ -83,37 +73,27 @@ func (t FeatureTagValue) Equals(val FeatureTagValue) bool {
 	if err != nil {
 		return false
 	}
-	q, err := t.quotedASCII()
-	if err != nil {
-		return false
-	}
+	q := t.quotedASCII()
 	uu, err := val.unquotedASCII()
 	if err != nil {
 		return false
 	}
-	qq, err := val.quotedASCII()
-	if err != nil {
-		return false
-	}
+	qq := val.quotedASCII()
 	return u == uu || q == qq
 }
 
 // quotedASCII encodes the tag value to ASCII and surrounds it with double quotes.
-func (t FeatureTagValue) quotedASCII() (string, error) {
+func (t FeatureTagValue) quotedASCII() string {
 	// remove quotes if they exist.
 	u := strings.Trim(t.String(), "\"")
 	// convert to ASCII and quote.
-	return strconv.QuoteToASCII(u), nil
+	return strconv.QuoteToASCII(u)
 }
 
 // unquotedASCII encodes the tag value to ASCII and removes surrounding double quotes.
 func (t FeatureTagValue) unquotedASCII() (string, error) {
-	var q string
-	var err error
 	// convert ASCII and quote.
-	if q, err = t.quotedASCII(); err != nil {
-		return q, err
-	}
+	q := t.quotedASCII()
 	// unquote.
 	return strconv.Unquote(q)
 }

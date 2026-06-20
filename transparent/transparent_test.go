@@ -18,17 +18,15 @@ import (
 	"go.uber.org/zap"
 )
 
-var (
-	jsonList = func(reps ...representation.Representation) representation.Representation {
-		list := representation.List{}
-		list.SetContentType("application/json")
-		list.SetContentCharset("ascii")
-		list.SetContentEncoding([]string{"identity"})
-		list.SetContentLanguage("en-US")
-		list.SetRepresentations(reps...)
-		return &list
-	}
-)
+var jsonList = func(reps ...representation.Representation) representation.Representation {
+	list := representation.List{}
+	list.SetContentType("application/json")
+	list.SetContentCharset("ascii")
+	list.SetContentEncoding([]string{"identity"})
+	list.SetContentLanguage("en-US")
+	list.SetRepresentations(reps...)
+	return &list
+}
 
 type TransparentTestSuite struct {
 	suite.Suite

@@ -152,8 +152,8 @@ func New(options ...Option) Negotiator {
 // Negotiate performs proactive (server-driven) content negotiation with the
 // representations provided.
 func (n Negotiator) Negotiate(
-	ctx negotiator.NegotiationContext, reps ...representation.Representation) (err error) {
-
+	ctx negotiator.NegotiationContext, reps ...representation.Representation,
+) (err error) {
 	defer n.scope.Timer(scopeNameProactiveTimer).Start().Stop()
 	defer func() {
 		if err != nil {
@@ -166,7 +166,7 @@ func (n Negotiator) Negotiate(
 		ctx.ResponseWriter.WriteHeader(status)
 		n.logger.Info("no representations to negotiate", zap.Int("status", status))
 		n.scope.Counter(scopeNameProactiveNoContentCounter).Inc(1)
-		return
+		return err
 	}
 
 	var (
@@ -179,37 +179,37 @@ func (n Negotiator) Negotiate(
 	)
 	if headerValues, hasHeader = ctx.Request.Header["Accept"]; hasHeader {
 		if accept, err = header.NewAccept(headerValues); err != nil {
-			return
+			return err
 		}
 	}
 	if headerValues, hasHeader = ctx.Request.Header["Accept-Language"]; hasHeader {
 		if acceptLanguage, err = header.NewAcceptLanguage(headerValues); err != nil {
-			return
+			return err
 		}
 	}
 	if headerValues, hasHeader = ctx.Request.Header["Accept-Charset"]; hasHeader {
 		if acceptCharset, err = header.NewAcceptCharset(headerValues); err != nil {
-			return
+			return err
 		}
 	}
 	for _, r := range reps {
 		var c bool
 		if c, err = accept.Compatible(r.ContentType()); err != nil {
-			return
+			return err
 		} else if !c {
-			ac = ac + 1
+			ac++
 		}
 
 		if c, err = acceptLanguage.Compatible(r.ContentLanguage()); err != nil {
-			return
+			return err
 		} else if !c {
-			alc = alc + 1
+			alc++
 		}
 
 		if c, err = acceptCharset.Compatible(r.ContentCharset()); err != nil {
-			return
+			return err
 		} else if !c {
-			acc = acc + 1
+			acc++
 		}
 	}
 	if len(reps) == ac && n.strictAccept {
@@ -228,7 +228,7 @@ func (n Negotiator) Negotiate(
 	// choose 'best' representation.
 	var rep representation.Representation
 	if rep, err = n.chooser.Choose(ctx.Request, reps...); err != nil {
-		return
+		return err
 	}
 
 	if rep == nil {
@@ -240,8 +240,8 @@ func (n Negotiator) Negotiate(
 // acceptable is responsible for responding to the user agent with the
 // representation chosen by the server-side algorithm.
 func (n Negotiator) acceptable(
-	ctx negotiator.NegotiationContext, rep representation.Representation) (err error) {
-
+	ctx negotiator.NegotiationContext, rep representation.Representation,
+) (err error) {
 	defer func() {
 		if err == nil {
 			n.scope.Counter(scopeNameProactiveAcceptableCounter).Inc(1)
@@ -251,7 +251,7 @@ func (n Negotiator) acceptable(
 	// serialize.
 	var b []byte
 	if b, err = rep.Bytes(); err != nil {
-		return
+		return err
 	}
 
 	// respond.
@@ -284,15 +284,15 @@ func (n Negotiator) acceptable(
 			zap.String("content-location", (&loc).String()),
 			zap.Int("status", status))
 	}
-	return
+	return err
 }
 
 // notAcceptable is responsible for responding to the user agent with a
 // 406 HTTP status code, along with a representation describing the available
 // representations and their metadata.
 func (n Negotiator) notAcceptable(
-	ctx negotiator.NegotiationContext, reps ...representation.Representation) (err error) {
-
+	ctx negotiator.NegotiationContext, reps ...representation.Representation,
+) (err error) {
 	defer func() {
 		if err == nil {
 			n.scope.Counter(scopeNameProactiveNotAcceptableCounter).Inc(1)
@@ -315,7 +315,7 @@ func (n Negotiator) notAcceptable(
 		lists = append(lists, c(reps...))
 	}
 	if chosen, err = n.chooser.Choose(ctx.Request, lists...); err != nil {
-		return
+		return err
 	}
 	n.logger.Debug("completed choosing on not acceptable response",
 		zap.Int("representation-count", len(lists)))
@@ -329,7 +329,7 @@ func (n Negotiator) notAcceptable(
 	// serialize.
 	var b []byte
 	if b, err = chosen.Bytes(); err != nil {
-		return
+		return err
 	}
 
 	// respond.
@@ -356,5 +356,5 @@ func (n Negotiator) notAcceptable(
 			zap.String("content-charset", cc),
 			zap.Int("status", status))
 	}
-	return
+	return err
 }

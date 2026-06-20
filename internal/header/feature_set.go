@@ -21,9 +21,7 @@ import (
 	"strings"
 )
 
-var (
-	EmptyFeatureSet = FeatureSet(map[FeatureTag][]FeatureTagValue{})
-)
+var EmptyFeatureSet = FeatureSet(map[FeatureTag][]FeatureTagValue{})
 
 // FeatureSet represents a collection of feature tags and their values.
 type FeatureSet map[FeatureTag][]FeatureTagValue

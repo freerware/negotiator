@@ -16,7 +16,6 @@ func TestAcceptEncodingTestSuite(t *testing.T) {
 }
 
 func (s AcceptEncodingTestSuite) TestAcceptEncoding_NewAcceptEncoding() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -75,7 +74,6 @@ func (s AcceptEncodingTestSuite) TestAcceptEncoding_CodingRanges() {
 }
 
 func (s AcceptEncodingTestSuite) TestAcceptEncoding_IsEmpty() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -96,7 +94,6 @@ func (s AcceptEncodingTestSuite) TestAcceptEncoding_IsEmpty() {
 }
 
 func (s AcceptEncodingTestSuite) TestAcceptEncoding_String() {
-
 	tests := []struct {
 		name string
 		in   []string

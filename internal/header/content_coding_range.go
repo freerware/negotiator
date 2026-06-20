@@ -25,9 +25,7 @@ import (
 	"github.com/stretchr/stew/slice"
 )
 
-var (
-	contentCodingRangeRegex = regexp.MustCompile(`^([A-Za-z0-9-]+|\*)(;\s?q=(\d(\.\d{1,3})?))?$`)
-)
+var contentCodingRangeRegex = regexp.MustCompile(`^([A-Za-z0-9-]+|\*)(;\s?q=(\d(\.\d{1,3})?))?$`)
 
 var (
 	gzip      = "gzip"
@@ -86,8 +84,6 @@ func NewContentCodingRange(contentCoding string) (ContentCodingRange, error) {
 	}
 	groups := contentCodingRangeRegex.FindStringSubmatch(contentCoding)
 
-	var valid []string
-	valid = append(valid, contentCodings...)
 	if !slice.ContainsString(contentCodings, groups[1]) {
 		return ContentCodingRange{}, ErrInvalidContentCodingRange
 	}
@@ -111,7 +107,7 @@ func (cc ContentCodingRange) IsWildcard() bool {
 
 // IsIdentity indicates if the specified coding range is 'identi'.
 func (cc ContentCodingRange) IsIdentity() bool {
-	return strings.ToLower(cc.coding) == strings.ToLower(identity)
+	return strings.EqualFold(cc.coding, identity)
 }
 
 // IsCoding indicates if the specified coding range is a content coding.
@@ -133,7 +129,7 @@ func (cc ContentCodingRange) Compatible(coding string) bool {
 	if cc.IsWildcard() {
 		return true
 	}
-	return strings.ToLower(cc.CodingRange()) == strings.ToLower(coding)
+	return strings.EqualFold(cc.CodingRange(), coding)
 }
 
 // QualityValue retrieves the quality value of the content coding.

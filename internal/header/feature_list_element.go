@@ -28,9 +28,7 @@ var (
 	improvementDegration = regexp.MustCompile(`^(\+(\d+(\.\d{1,4})?))?(\-(\d+(\.\d{1,4})?))?$`)
 )
 
-var (
-	ErrInvalidPredicateListElement = errors.New("invalid predicate list element")
-)
+var ErrInvalidPredicateListElement = errors.New("invalid predicate list element")
 
 // FeatureListElement represents a single element within a feature list. An
 // element can either be a feature predicate or feature predicate bag.

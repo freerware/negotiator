@@ -46,17 +46,15 @@ var (
 	scopeNameReactiveErrorCounter           = "negotiate.error"
 )
 
-var (
-	jsonList = func(reps ...representation.Representation) representation.Representation {
-		list := representation.List{}
-		list.SetContentType("application/json")
-		list.SetContentCharset("ascii")
-		list.SetContentEncoding([]string{"identity"})
-		list.SetContentLanguage("en-US")
-		list.SetRepresentations(reps...)
-		return &list
-	}
-)
+var jsonList = func(reps ...representation.Representation) representation.Representation {
+	list := representation.List{}
+	list.SetContentType("application/json")
+	list.SetContentCharset("ascii")
+	list.SetContentEncoding([]string{"identity"})
+	list.SetContentLanguage("en-US")
+	list.SetRepresentations(reps...)
+	return &list
+}
 
 // Negotiator represents the negotiator responsible for performing
 // reactive (agent-driven) negotiation.
@@ -92,8 +90,8 @@ func New(options ...Option) Negotiator {
 // representations provided.
 func (n Negotiator) Negotiate(
 	ctx negotiator.NegotiationContext,
-	reps ...representation.Representation) (err error) {
-
+	reps ...representation.Representation,
+) (err error) {
 	defer n.scope.Timer(scopeNameReactiveTimer).Start().Stop()
 	defer func() {
 		if err != nil {
@@ -108,7 +106,7 @@ func (n Negotiator) Negotiate(
 		ctx.ResponseWriter.WriteHeader(status)
 		n.logger.Info("no representations to negotiate", zap.Int("status", status))
 		n.scope.Counter(scopeNameReactiveNoContentCounter).Inc(1)
-		return
+		return err
 	}
 
 	// construct representation.
@@ -117,7 +115,7 @@ func (n Negotiator) Negotiate(
 	// serialize.
 	var b []byte
 	if b, err = rep.Bytes(); err != nil {
-		return
+		return err
 	}
 
 	// respond.
@@ -144,5 +142,5 @@ func (n Negotiator) Negotiate(
 			zap.String("content-charset", cc),
 			zap.Int("status", status))
 	}
-	return
+	return err
 }

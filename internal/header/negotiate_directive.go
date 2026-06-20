@@ -20,12 +20,9 @@ import (
 	"strconv"
 )
 
-var (
-
-	// ErrEmptyNegotiateDirective is an error that indicates that the
-	// negotiate directive cannot be empty.
-	ErrEmptyNegotiateDirective = errors.New("negotiate directive cannot be empty")
-)
+// ErrEmptyNegotiateDirective is an error that indicates that the
+// negotiate directive cannot be empty.
+var ErrEmptyNegotiateDirective = errors.New("negotiate directive cannot be empty")
 
 // NegotiateDirective represents a directive specified within the Negotiate
 // header.

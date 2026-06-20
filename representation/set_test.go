@@ -54,7 +54,6 @@ func (s *RepresentationSetTestSuite) SetupTest() {
 }
 
 func (s *RepresentationSetTestSuite) TestSet_Where_WithMatches() {
-
 	// action.
 	matches := s.sut.Where(func(r representation.RankedRepresentation) bool {
 		return r.SourceQualityValue < 0.9
@@ -66,18 +65,16 @@ func (s *RepresentationSetTestSuite) TestSet_Where_WithMatches() {
 }
 
 func (s *RepresentationSetTestSuite) TestSet_Where_WithoutMatches() {
-
 	// action.
 	matches := s.sut.Where(func(r representation.RankedRepresentation) bool {
 		return r.SourceQualityValue < 0.8
 	})
 
 	// assert.
-	s.Require().Len(matches, 0)
+	s.Require().Empty(matches)
 }
 
 func (s *RepresentationSetTestSuite) TestSet_AsSlice() {
-
 	// action.
 	slice := s.sut.AsSlice()
 
@@ -87,7 +84,6 @@ func (s *RepresentationSetTestSuite) TestSet_AsSlice() {
 }
 
 func (s *RepresentationSetTestSuite) TestSet_Sort() {
-
 	// arrange.
 	first, second := s.sut[0], s.sut[1]
 
@@ -102,13 +98,11 @@ func (s *RepresentationSetTestSuite) TestSet_Sort() {
 }
 
 func (s *RepresentationSetTestSuite) TestSet_First() {
-
 	// action + assert.
 	s.Equal(s.sut[0], s.sut.First())
 }
 
 func (s *RepresentationSetTestSuite) TestSet_First_NoElements() {
-
 	// arrange.
 	s.sut = representation.EmptySet
 
@@ -119,19 +113,16 @@ func (s *RepresentationSetTestSuite) TestSet_First_NoElements() {
 }
 
 func (s *RepresentationSetTestSuite) TestSet_Size() {
-
 	// action + assert.
 	s.Equal(len(s.sut), s.sut.Size())
 }
 
 func (s *RepresentationSetTestSuite) TestSet_Empty_IsEmpty() {
-
 	// action + assert.
 	s.False(s.sut.Empty())
 }
 
 func (s *RepresentationSetTestSuite) TestSet_Empty_IsNotEmpty() {
-
 	// arrange.
 	s.sut = representation.EmptySet
 

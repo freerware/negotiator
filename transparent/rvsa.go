@@ -35,12 +35,12 @@ func RVSA1() representation.Chooser {
 
 // Choose determines the 'best' representation from the provided set.
 func (c rvsa1) Choose(
-	r *http.Request, reps ...representation.Representation) (representation.Representation, error) {
-
+	r *http.Request, reps ...representation.Representation,
+) (representation.Representation, error) {
 	var (
 		a header.Accept
 		// TODO(FREER) support encoding extension.
-		//ae header.AcceptEncoding
+		// ae header.AcceptEncoding
 		al  header.AcceptLanguage
 		ac  header.AcceptCharset
 		af  header.AcceptFeatures
@@ -53,8 +53,8 @@ func (c rvsa1) Choose(
 	}
 
 	// TODO(FREER) support encoding extension.
-	//acceptEncodingEncoding := r.Header["Accept-Encoding"]
-	//if ae, err = header.NewAcceptEncoding(acceptEncoding); err != nil {
+	// acceptEncodingEncoding := r.Header["Accept-Encoding"]
+	// if ae, err = header.NewAcceptEncoding(acceptEncoding); err != nil {
 	//	return nil, err
 	//}
 
@@ -75,7 +75,6 @@ func (c rvsa1) Choose(
 
 	var variants representation.Set
 	for _, rep := range reps {
-
 		qs := rep.SourceQuality()
 		qt, twc := c.acceptQuality(rep, a)
 		qc, cwc := c.acceptCharsetQuality(rep, ac)
@@ -108,7 +107,7 @@ func (c rvsa1) Choose(
 
 	highest := variants.First()
 	score := c.overallQuality(highest)
-	//https://tools.ietf.org/html/rfc2296#section-3.5 accomplishes #1 and #2
+	// https://tools.ietf.org/html/rfc2296#section-3.5 accomplishes #1 and #2
 	if score > 0.0 && highest.IsDefinite {
 		return highest.Representation, nil
 	}
@@ -205,12 +204,12 @@ func (c rvsa1) acceptFeatureQuality(
 	}
 	featureList, err := header.NewFeatureList(rep.ContentFeatures())
 	if err != nil {
-		panic(err) //TODO(FREER)
+		panic(err) // TODO(FREER)
 	}
 	degradation := featureList.QualityDegradation(
 		acceptFeature.AsFeatureSets(),
 	)
-	return header.QualityValue(degradation), usedWildcard //TODO(FREER)
+	return header.QualityValue(degradation), usedWildcard // TODO(FREER)
 }
 
 func (c rvsa1) overallQuality(v representation.RankedRepresentation) float32 {

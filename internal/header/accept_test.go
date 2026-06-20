@@ -31,7 +31,6 @@ func TestAcceptTestSuite(t *testing.T) {
 }
 
 func (s AcceptTestSuite) TestAccept_NewAccept() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -102,7 +101,6 @@ func (s AcceptTestSuite) TestAccept_MediaRanges() {
 }
 
 func (s AcceptTestSuite) TestAccept_IsEmpty() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -123,7 +121,6 @@ func (s AcceptTestSuite) TestAccept_IsEmpty() {
 }
 
 func (s AcceptTestSuite) TestAccept_String() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -156,7 +153,6 @@ func (s AcceptTestSuite) TestAccept_String() {
 }
 
 func (s *AcceptTestSuite) TestAccept_Compatible() {
-
 	tests := []struct {
 		name       string
 		mediaRange []string

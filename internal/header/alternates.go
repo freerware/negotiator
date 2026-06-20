@@ -47,10 +47,6 @@ var (
 	// variantAttributeFeatures represents the attribute that communicates the
 	// feature list of the variant.
 	variantAttributeFeatures = "features"
-
-	// variantAttributeDescription represents the attribute that communicates
-	// the textual description of the variant.
-	variantAttributeDescription = "description"
 )
 
 // variantAttributes represents the various dimensions of a variant described
@@ -105,7 +101,8 @@ type Alternates struct {
 
 // NewAlternates constructs an Alternates header with the provided representations.
 func NewAlternates(
-	fb representation.Representation, reps ...representation.Representation) (Alternates, error) {
+	fb representation.Representation, reps ...representation.Representation,
+) (Alternates, error) {
 	var descriptions []variantDescription
 	for _, rep := range reps {
 		bytes, err := rep.Bytes()

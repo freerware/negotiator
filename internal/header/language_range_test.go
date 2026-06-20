@@ -32,14 +32,13 @@ func TestLanguageRangeRangeTestSuite(t *testing.T) {
 }
 
 func (s *LanguageRangeTestSuite) TestLanguageRange_NewLanguageRange() {
-
 	tests := []struct {
 		name string
 		in   string
 		err  error
 	}{
 		{"Gzip", "en-US", nil},
-		//{"Invalid", "jibberish", header.ErrInvalidLanguageRange},
+		// {"Invalid", "jibberish", header.ErrInvalidLanguageRange},
 		//{"InvalidWithQValue", "jibberish;q=0.5", header.ErrInvalidLanguageRange},
 		{"Empty", "", header.ErrEmptyLanguageRange},
 	}
@@ -62,7 +61,6 @@ func (s *LanguageRangeTestSuite) TestLanguageRange_NewLanguageRange() {
 }
 
 func (s *LanguageRangeTestSuite) TestLanguageRange_NewLanguageRange_Compatible() {
-
 	tests := []struct {
 		name     string
 		language string
@@ -89,7 +87,6 @@ func (s *LanguageRangeTestSuite) TestLanguageRange_NewLanguageRange_Compatible()
 }
 
 func (s *LanguageRangeTestSuite) TestLanguageRange_IsWildcard() {
-
 	tests := []struct {
 		name     string
 		language string
@@ -112,7 +109,6 @@ func (s *LanguageRangeTestSuite) TestLanguageRange_IsWildcard() {
 }
 
 func (s *LanguageRangeTestSuite) TestLanguageRange_IsTag() {
-
 	tests := []struct {
 		name     string
 		language string
@@ -135,7 +131,6 @@ func (s *LanguageRangeTestSuite) TestLanguageRange_IsTag() {
 }
 
 func (s *LanguageRangeTestSuite) TestLanguageRange_Tag() {
-
 	tests := []struct {
 		name     string
 		language string
@@ -157,7 +152,6 @@ func (s *LanguageRangeTestSuite) TestLanguageRange_Tag() {
 }
 
 func (s *LanguageRangeTestSuite) TestLanguageRange_QualityValue() {
-
 	tests := []struct {
 		name     string
 		language string
@@ -179,7 +173,6 @@ func (s *LanguageRangeTestSuite) TestLanguageRange_QualityValue() {
 }
 
 func (s *LanguageRangeTestSuite) TestLanguageRange_String() {
-
 	tests := []struct {
 		name     string
 		language string

@@ -35,9 +35,7 @@ func TestAlternatesTestSuite(t *testing.T) {
 }
 
 func (s AlternatesTestSuite) TestAlternates_NewAlternates() {
-
-	json, html, english, ascii, gzip :=
-		"application/json", "text/html", "en-US", "ascii", "gzip"
+	json, html, english, ascii, gzip := "application/json", "text/html", "en-US", "ascii", "gzip"
 	loc, _ := url.Parse("http://www.example.com/thing")
 	v1 := _representation.NewBuilder().
 		WithLocation(*loc).
@@ -83,9 +81,7 @@ func (s AlternatesTestSuite) TestAlternates_NewAlternates() {
 }
 
 func (s AlternatesTestSuite) TestAlternates_HasFallback() {
-
-	json, english, ascii, gzip :=
-		"application/json", "en-US", "ascii", "gzip"
+	json, english, ascii, gzip := "application/json", "en-US", "ascii", "gzip"
 	loc, _ := url.Parse("http://www.example.com/thing")
 	v1 := _representation.NewBuilder().
 		WithLocation(*loc).
@@ -116,9 +112,7 @@ func (s AlternatesTestSuite) TestAlternates_HasFallback() {
 }
 
 func (s AlternatesTestSuite) TestAlternates_ValuesAsStrings() {
-
-	json, html, english, ascii, gzip :=
-		"application/json", "text/html", "en-US", "ascii", "gzip"
+	json, html, english, ascii, gzip := "application/json", "text/html", "en-US", "ascii", "gzip"
 	loc, _ := url.Parse("http://www.example.com/thing")
 	v1 := _representation.NewBuilder().
 		WithLocation(*loc).
@@ -174,9 +168,7 @@ func (s AlternatesTestSuite) TestAlternates_ValuesAsStrings() {
 }
 
 func (s AlternatesTestSuite) TestAlternates_ValuesAsString() {
-
-	json, html, english, ascii, gzip :=
-		"application/json", "text/html", "en-US", "ascii", "gzip"
+	json, html, english, ascii, gzip := "application/json", "text/html", "en-US", "ascii", "gzip"
 	loc, _ := url.Parse("http://www.example.com/thing")
 	v1 := _representation.NewBuilder().
 		WithLocation(*loc).
@@ -232,9 +224,7 @@ func (s AlternatesTestSuite) TestAlternates_ValuesAsString() {
 }
 
 func (s AlternatesTestSuite) TestAlternates_String() {
-
-	json, html, english, ascii, gzip :=
-		"application/json", "text/html", "en-US", "ascii", "gzip"
+	json, html, english, ascii, gzip := "application/json", "text/html", "en-US", "ascii", "gzip"
 	loc, _ := url.Parse("http://www.example.com/thing")
 	v1 := _representation.NewBuilder().
 		WithLocation(*loc).

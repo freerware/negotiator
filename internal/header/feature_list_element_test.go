@@ -31,7 +31,6 @@ func TestFeatureListElementTestSuite(t *testing.T) {
 }
 
 func (s FeatureListElementTestSuite) TestFeatureListElement_NewPredicateListElement() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -60,7 +59,6 @@ func (s FeatureListElementTestSuite) TestFeatureListElement_NewPredicateListElem
 }
 
 func (s FeatureListElementTestSuite) TestPredicateListElement_TrueImprovement() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -83,7 +81,6 @@ func (s FeatureListElementTestSuite) TestPredicateListElement_TrueImprovement() 
 }
 
 func (s FeatureListElementTestSuite) TestPredicateListElement_FalseDegradation() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -106,7 +103,6 @@ func (s FeatureListElementTestSuite) TestPredicateListElement_FalseDegradation()
 }
 
 func (s FeatureListElementTestSuite) TestPredicateListElement_String() {
-
 	tests := []struct {
 		name      string
 		predicate string
@@ -145,7 +141,6 @@ func (s FeatureListElementTestSuite) TestPredicateListElement_String() {
 }
 
 func (s FeatureListElementTestSuite) TestFeatureListElement_NewPredicateBagListElement() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -174,7 +169,6 @@ func (s FeatureListElementTestSuite) TestFeatureListElement_NewPredicateBagListE
 }
 
 func (s FeatureListElementTestSuite) TestPredicateBagListElement_TrueImprovement() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -197,7 +191,6 @@ func (s FeatureListElementTestSuite) TestPredicateBagListElement_TrueImprovement
 }
 
 func (s FeatureListElementTestSuite) TestPredicateBagListElement_FalseDegradation() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -220,7 +213,6 @@ func (s FeatureListElementTestSuite) TestPredicateBagListElement_FalseDegradatio
 }
 
 func (s FeatureListElementTestSuite) TestPredicateBagListElement_String() {
-
 	tests := []struct {
 		name         string
 		predicateBag string

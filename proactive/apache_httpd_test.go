@@ -172,8 +172,7 @@ func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_RFC7231AcceptExample() {
 
 func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_InvalidLevelErr() {
 	// arrange.
-	htmlLevel2, html, english, ascii, gzip :=
-		"text/html;level=2", "text/html", "en-US", "ascii", "gzip"
+	htmlLevel2, html, english, ascii, gzip := "text/html;level=2", "text/html", "en-US", "ascii", "gzip"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	request.Header.Add("Accept-Language", english)
 	request.Header.Add("Accept-Encoding", gzip)
@@ -207,8 +206,7 @@ func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_InvalidLevelErr() {
 
 func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_BestCharset() {
 	// arrange.
-	htmlLevel2, html, english, asciiRange, gzip, utf8Range, ascii, utf8 :=
-		"text/html;level=2", "text/html", "en-US", "ascii;q=0.9", "gzip", "utf8;q=0.8", "ascii", "utf8"
+	htmlLevel2, html, english, asciiRange, gzip, utf8Range, ascii, utf8 := "text/html;level=2", "text/html", "en-US", "ascii;q=0.9", "gzip", "utf8;q=0.8", "ascii", "utf8"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	request.Header.Add("Accept-Language", english)
 	request.Header.Add("Accept-Encoding", gzip)
@@ -244,8 +242,7 @@ func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_BestCharset() {
 
 func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_NotISO88591() {
 	// arrange.
-	htmlLevel2, html, english, gzip, ascii, iso88591 :=
-		"text/html;level=2", "text/html", "en-US", "gzip", "ascii", "iso-8859-1"
+	htmlLevel2, html, english, gzip, ascii, iso88591 := "text/html;level=2", "text/html", "en-US", "gzip", "ascii", "iso-8859-1"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	request.Header.Add("Accept-Language", english)
 	request.Header.Add("Accept-Encoding", gzip)
@@ -281,8 +278,7 @@ func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_NotISO88591() {
 
 func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_BestEncoding() {
 	// arrange.
-	htmlLevel2, html, english, gzipRange, ascii, gzip, compressRange, compress :=
-		"text/html;level=2", "text/html", "en-US", "gzip;q=0.9", "ascii", "gzip", "compress;q=0.8", "compress"
+	htmlLevel2, html, english, gzipRange, ascii, gzip, compressRange, compress := "text/html;level=2", "text/html", "en-US", "gzip;q=0.9", "ascii", "gzip", "compress;q=0.8", "compress"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	request.Header.Add("Accept-Language", english)
 	request.Header.Add("Accept-Encoding", gzipRange)
@@ -318,8 +314,7 @@ func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_BestEncoding() {
 
 func (s *ApacheHTTPDTestSuite) TestApacheHTTPD_Choose_SmallestContentLength() {
 	// arrange.
-	htmlLevel2, html, english, ascii, gzip :=
-		"text/html;level=2", "text/html", "en-US", "ascii", "gzip"
+	htmlLevel2, html, english, ascii, gzip := "text/html;level=2", "text/html", "en-US", "ascii", "gzip"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	request.Header.Add("Accept-Language", english)
 	request.Header.Add("Accept-Encoding", gzip)

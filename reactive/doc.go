@@ -16,20 +16,23 @@
 // Package reactive implements reactive content negotiation as defined in
 // RFC7231 Section 3.4.2.
 //
-// Construction
+// # Construction
 //
 // For out of the box reactive negotiation support, use reactive.Default,
 // which is the default reactive negotiator.
+//
 //	//retrieves the default reactive negotiator.
 //	p := reactive.Default
+//
 // In situations where more customization is required, use the reactive.New
 // constructor function and specify options as arguments.
+//
 //	// constructs a reactive negotiator with the provided options.
 //	p := reactive.New(
 //		reactive.Logger(l),
 //	)
 //
-// See Also
+// # See Also
 //
 // ➣ https://tools.ietf.org/html/rfc7231#section-3.4.2
 package reactive

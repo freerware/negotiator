@@ -145,10 +145,8 @@ func (mr MediaRange) Compatible(mediaType string) (bool, error) {
 	}
 
 	// TODO(FREER) what if */* is passed in?
-	matchedType :=
-		strings.ToLower(mr.Type()) == strings.ToLower(t) || mr.Type() == "*"
-	matchedSubType :=
-		strings.ToLower(mr.SubType()) == strings.ToLower(subT) || mr.SubType() == "*"
+	matchedType := strings.EqualFold(mr.Type(), t) || mr.Type() == "*"
+	matchedSubType := strings.EqualFold(mr.SubType(), subT) || mr.SubType() == "*"
 
 	matchedParams := true
 	if mr.HasParams() {
@@ -164,8 +162,8 @@ func (mr MediaRange) Compatible(mediaType string) (bool, error) {
 
 // Precedence determines the specificity of the media range.
 func (mr MediaRange) Precedence() int {
-	any := mr.t == "*" && mr.subT == "*"
-	if any {
+	wildcard := mr.t == "*" && mr.subT == "*"
+	if wildcard {
 		return 0 + len(mr.params)
 	}
 	if mr.subT == "*" {

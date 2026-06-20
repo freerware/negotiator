@@ -31,7 +31,6 @@ func TestFeatureSetTestSuite(t *testing.T) {
 }
 
 func (s FeatureSetTestSuite) TestFeatureSet_Add() {
-
 	tests := []struct {
 		name   string
 		tag    header.FeatureTag
@@ -60,7 +59,7 @@ func (s FeatureSetTestSuite) TestFeatureSet_Add() {
 		s.Run(test.name, func() {
 			// action + assert.
 			fs := header.FeatureSet(map[header.FeatureTag][]header.FeatureTagValue{
-				header.FeatureTag("foo"): []header.FeatureTagValue{},
+				header.FeatureTag("foo"): {},
 			})
 			fs.Add(test.tag, test.values...)
 		})
@@ -68,7 +67,6 @@ func (s FeatureSetTestSuite) TestFeatureSet_Add() {
 }
 
 func (s FeatureSetTestSuite) TestFeatureSet_Contains() {
-
 	tests := []struct {
 		name       string
 		featureSet header.FeatureSet
@@ -80,7 +78,7 @@ func (s FeatureSetTestSuite) TestFeatureSet_Contains() {
 			"Match",
 			header.FeatureSet(
 				map[header.FeatureTag][]header.FeatureTagValue{
-					header.FeatureTag("yish"): []header.FeatureTagValue{
+					header.FeatureTag("yish"): {
 						header.FeatureTagValue("\"vam\""),
 					},
 				}),
@@ -98,12 +96,12 @@ func (s FeatureSetTestSuite) TestFeatureSet_Contains() {
 }
 
 func (s FeatureSetTestSuite) TestFeatureSet_Values() {
-
 	fs := header.FeatureSet(
 		map[header.FeatureTag][]header.FeatureTagValue{
-			header.FeatureTag("\"foo\""): []header.FeatureTagValue{},
-			header.FeatureTag("yish"):    []header.FeatureTagValue{header.FeatureTagValue("\"vam\"")},
-			header.FeatureTag("baz"):     []header.FeatureTagValue{header.FeatureTagValue("1"), header.FeatureTagValue("5")}})
+			header.FeatureTag("\"foo\""): {},
+			header.FeatureTag("yish"):    {header.FeatureTagValue("\"vam\"")},
+			header.FeatureTag("baz"):     {header.FeatureTagValue("1"), header.FeatureTagValue("5")},
+		})
 
 	tests := []struct {
 		name       string
@@ -142,12 +140,12 @@ func (s FeatureSetTestSuite) TestFeatureSet_Values() {
 }
 
 func (s FeatureSetTestSuite) TestFeatureSet_String() {
-
 	fs := header.FeatureSet(
 		map[header.FeatureTag][]header.FeatureTagValue{
-			header.FeatureTag("\"foo\""): []header.FeatureTagValue{},
-			header.FeatureTag("yish"):    []header.FeatureTagValue{header.FeatureTagValue("\"vam\"")},
-			header.FeatureTag("baz"):     []header.FeatureTagValue{header.FeatureTagValue("1"), header.FeatureTagValue("5")}})
+			header.FeatureTag("\"foo\""): {},
+			header.FeatureTag("yish"):    {header.FeatureTagValue("\"vam\"")},
+			header.FeatureTag("baz"):     {header.FeatureTagValue("1"), header.FeatureTagValue("5")},
+		})
 
 	tests := []struct {
 		name       string

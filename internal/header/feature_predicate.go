@@ -49,16 +49,14 @@ type FeaturePredicateBag []FeaturePredicate
 
 // NewFeaturePredicateBag constructs a feature predicate bag.
 func NewFeaturePredicateBag(predicateBag string) (FeaturePredicateBag, error) {
-	openCount, closeCount :=
-		strings.Count(predicateBag, "["),
+	openCount, closeCount := strings.Count(predicateBag, "["),
 		strings.Count(predicateBag, "]")
 
 	if openCount != closeCount {
 		return nil, ErrInvalidPredicateBag
 	}
-	predicateBag =
-		strings.TrimSpace(
-			strings.TrimPrefix(strings.TrimSuffix(predicateBag, "]"), "["))
+	predicateBag = strings.TrimSpace(
+		strings.TrimPrefix(strings.TrimSuffix(predicateBag, "]"), "["))
 	predicates := strings.Split(predicateBag, " ")
 
 	var fpb FeaturePredicateBag
@@ -101,7 +99,6 @@ type FeaturePredicate interface {
 
 // newPredicate constructs a new feature predicate.
 func NewFeaturePredicate(predicate string) (FeaturePredicate, error) {
-
 	parseExists := func(p string) (fp FeaturePredicate, ok bool) {
 		if ok = existsPredicate.MatchString(p); !ok {
 			return

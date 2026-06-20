@@ -16,7 +16,6 @@ func TestQualityValueTestSuite(t *testing.T) {
 }
 
 func (s QualityValueTestSuite) TestQualityValue_NewQualityValue() {
-
 	tests := []struct {
 		name string
 		in   float32
@@ -44,7 +43,6 @@ func (s QualityValueTestSuite) TestQualityValue_NewQualityValue() {
 }
 
 func (s QualityValueTestSuite) TestQualityValue_Equals() {
-
 	tests := []struct {
 		name string
 		qv   float32
@@ -66,7 +64,6 @@ func (s QualityValueTestSuite) TestQualityValue_Equals() {
 }
 
 func (s QualityValueTestSuite) TestQualityValue_LessThan() {
-
 	tests := []struct {
 		name string
 		qv   float32
@@ -88,7 +85,6 @@ func (s QualityValueTestSuite) TestQualityValue_LessThan() {
 }
 
 func (s QualityValueTestSuite) TestQualityValue_GreaterThan() {
-
 	tests := []struct {
 		name string
 		qv   float32
@@ -110,7 +106,6 @@ func (s QualityValueTestSuite) TestQualityValue_GreaterThan() {
 }
 
 func (s QualityValueTestSuite) TestQualityValue_Multiply() {
-
 	tests := []struct {
 		name string
 		qv   float32
@@ -131,7 +126,6 @@ func (s QualityValueTestSuite) TestQualityValue_Multiply() {
 }
 
 func (s QualityValueTestSuite) TestQualityValue_Round() {
-
 	tests := []struct {
 		name string
 		qv   float32
@@ -155,7 +149,6 @@ func (s QualityValueTestSuite) TestQualityValue_Round() {
 }
 
 func (s QualityValueTestSuite) TestQualityValue_String() {
-
 	tests := []struct {
 		name string
 		qv   float32

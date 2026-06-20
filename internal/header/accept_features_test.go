@@ -31,7 +31,6 @@ func TestAcceptFeaturesTestSuite(t *testing.T) {
 }
 
 func (s AcceptFeaturesTestSuite) TestAcceptFeatures_NewAcceptFeatures() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -58,7 +57,6 @@ func (s AcceptFeaturesTestSuite) TestAcceptFeatures_NewAcceptFeatures() {
 }
 
 func (s AcceptFeaturesTestSuite) TestAcceptFeatures_IsEmpty() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -79,7 +77,6 @@ func (s AcceptFeaturesTestSuite) TestAcceptFeatures_IsEmpty() {
 }
 
 func (s AcceptFeaturesTestSuite) TestAcceptFeatures_String() {
-
 	tests := []struct {
 		name string
 		in   []string

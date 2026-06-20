@@ -52,7 +52,7 @@ var (
 // Errors that can be thrown from options.
 var (
 	// ErrVariantListSizeExceeded represents an error encountered when the
-	// provided variant list exceeds the maximum allowed.pr
+	// provided variant list exceeds the maximum allowed.pr.
 	ErrVariantListSizeExceeded = errors.New("number of representations exceeds the maximum")
 )
 
@@ -63,17 +63,15 @@ var (
 	scopeNameTransparentErrorCounter = "negotiate.error"
 )
 
-var (
-	jsonList = func(reps ...representation.Representation) representation.Representation {
-		list := representation.List{}
-		list.SetContentType("application/json")
-		list.SetContentCharset("ascii")
-		list.SetContentEncoding([]string{"identity"})
-		list.SetContentLanguage("en-US")
-		list.SetRepresentations(reps...)
-		return &list
-	}
-)
+var jsonList = func(reps ...representation.Representation) representation.Representation {
+	list := representation.List{}
+	list.SetContentType("application/json")
+	list.SetContentCharset("ascii")
+	list.SetContentEncoding([]string{"identity"})
+	list.SetContentLanguage("en-US")
+	list.SetRepresentations(reps...)
+	return &list
+}
 
 // Negotiator represents the negotiator responsible for
 // performing transparent negotiation.
@@ -120,8 +118,8 @@ func New(options ...Option) Negotiator {
 // Negotiate performs transparent content negotiation with the representations
 // provided.
 func (n Negotiator) Negotiate(
-	ctx negotiator.NegotiationContext, reps ...representation.Representation) (err error) {
-
+	ctx negotiator.NegotiationContext, reps ...representation.Representation,
+) (err error) {
 	defer n.scope.Timer(scopeNameTransparentTimer).Start().Stop()
 	defer func() {
 		if err != nil {
@@ -135,15 +133,14 @@ func (n Negotiator) Negotiate(
 
 	var negotiate header.Negotiate
 	if negotiate, err = header.NewNegotiate(ctx.Request.Header["Negotiate"]); err != nil {
-		return
+		return err
 	}
 
 	// determine when the user agent wants the server to choose the best
 	// variant on it's behalf.
-	shouldChoose :=
-		negotiate.Contains(header.NegotiateDirective("*")) ||
-			negotiate.ContainsRVSA("1.0") ||
-			negotiate.Contains(header.NegotiateDirectiveGuessSmall)
+	shouldChoose := negotiate.Contains(header.NegotiateDirective("*")) ||
+		negotiate.ContainsRVSA("1.0") ||
+		negotiate.Contains(header.NegotiateDirectiveGuessSmall)
 
 	if !shouldChoose {
 		return n.listResponse(ctx, reps...)
@@ -151,7 +148,7 @@ func (n Negotiator) Negotiate(
 
 	var rep representation.Representation
 	if rep, err = n.chooser.Choose(ctx.Request, reps...); err != nil {
-		return
+		return err
 	}
 
 	if rep == nil {
@@ -162,12 +159,12 @@ func (n Negotiator) Negotiate(
 		list := n.listRepresentationConstructor(reps...)
 		var listBytes []byte
 		if listBytes, err = list.Bytes(); err != nil {
-			return
+			return err
 		}
 
 		var choiceBytes []byte
 		if choiceBytes, err = rep.Bytes(); err != nil {
-			return
+			return err
 		}
 
 		less := len(choiceBytes) < len(listBytes)
@@ -181,7 +178,7 @@ func (n Negotiator) Negotiate(
 		}
 	}
 
-	//https://tools.ietf.org/html/rfc2068#section-3.2.3
+	// https://tools.ietf.org/html/rfc2068#section-3.2.3
 	sameURL := func(one, two url.URL) bool {
 		normalizePort := func(u url.URL) url.URL {
 			if u.Port() == "" {
@@ -219,7 +216,7 @@ func (n Negotiator) Negotiate(
 		return (&o).String() == (&t).String()
 	}
 
-	//https://tools.ietf.org/html/rfc2296#section-3.5
+	// https://tools.ietf.org/html/rfc2296#section-3.5
 	isNeighbor := func(neighborURL, resourceURL url.URL) bool {
 		trim := func(u url.URL) url.URL {
 			if lastSlash := strings.LastIndex(u.Path, "/"); lastSlash != -1 {
@@ -244,7 +241,8 @@ func (n Negotiator) Negotiate(
 // response, including the representation describing the available
 // representations and their metadata.
 func (n Negotiator) listResponse(
-	ctx negotiator.NegotiationContext, reps ...representation.Representation) error {
+	ctx negotiator.NegotiationContext, reps ...representation.Representation,
+) error {
 	a, err := header.NewAlternates(reps[0], reps...)
 	if err != nil {
 		return err
@@ -302,7 +300,8 @@ func (n Negotiator) listResponse(
 func (n Negotiator) choiceResponse(
 	ctx negotiator.NegotiationContext,
 	reps []representation.Representation,
-	rep representation.Representation) error {
+	rep representation.Representation,
+) error {
 	// If a response from a transparently negotiable resource includes an
 	// Alternates header, this header MUST contain the complete variant list
 	// bound to the negotiable resource. Responses from resources which do not

@@ -31,7 +31,6 @@ func TestAcceptLanguageTestSuite(t *testing.T) {
 }
 
 func (s AcceptLanguageTestSuite) TestAcceptLanguage_NewAcceptLanguage() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -90,7 +89,6 @@ func (s AcceptLanguageTestSuite) TestAcceptLanguage_LanguageRanges() {
 }
 
 func (s AcceptLanguageTestSuite) TestAcceptLanguage_IsEmpty() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -111,7 +109,6 @@ func (s AcceptLanguageTestSuite) TestAcceptLanguage_IsEmpty() {
 }
 
 func (s AcceptLanguageTestSuite) TestAcceptLanguage_String() {
-
 	tests := []struct {
 		name string
 		in   []string

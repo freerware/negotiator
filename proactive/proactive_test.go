@@ -182,8 +182,7 @@ func (s ProactiveTestSuite) TestProactive_AcceptStrictModeDisabled_MissingAccept
 func (s ProactiveTestSuite) TestProactive_StrictMode_NoMatchesForAccept() {
 	// arrange.
 	s.sut = proactive.New(proactive.Algorithm(s.chooser))
-	_json, _xml, english, ascii, gzip :=
-		"application/json", "application/xml", "en-US", "ascii", "gzip"
+	_json, _xml, english, ascii, gzip := "application/json", "application/xml", "en-US", "ascii", "gzip"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	responseWriter := httptest.NewRecorder()
 	request.Header.Add("Accept", _json)
@@ -219,8 +218,7 @@ func (s ProactiveTestSuite) TestProactive_StrictMode_NoMatchesForAccept() {
 func (s ProactiveTestSuite) TestProactive_AcceptStrictModeDisabled_NoMatchesForAccept() {
 	// arrange.
 	s.sut = proactive.New(proactive.Algorithm(s.chooser), proactive.DisableStrictAccept())
-	_json, _xml, english, ascii, gzip :=
-		"application/json", "application/xml", "en-US", "ascii", "gzip"
+	_json, _xml, english, ascii, gzip := "application/json", "application/xml", "en-US", "ascii", "gzip"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	responseWriter := httptest.NewRecorder()
 	request.Header.Add("Accept", _json)
@@ -523,8 +521,7 @@ func (s ProactiveTestSuite) TestProactive_AcceptCharsetStrictModeDisableld_Missi
 func (s ProactiveTestSuite) TestProactive_StrictMode_NoMatchesForAcceptCharset() {
 	// arrange.
 	s.sut = proactive.New(proactive.Algorithm(s.chooser))
-	_json, english, ascii, utf8, gzip :=
-		"application/json", "en-US", "ascii", "utf8", "gzip"
+	_json, english, ascii, utf8, gzip := "application/json", "en-US", "ascii", "utf8", "gzip"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	responseWriter := httptest.NewRecorder()
 	request.Header.Add("Accept", _json)
@@ -560,8 +557,7 @@ func (s ProactiveTestSuite) TestProactive_StrictMode_NoMatchesForAcceptCharset()
 func (s ProactiveTestSuite) TestProactive_AcceptCharsetStrictModeDisabled_NoMatchesForAcceptCharset() {
 	// arrange.
 	s.sut = proactive.New(proactive.Algorithm(s.chooser), proactive.DisableStrictAcceptCharset())
-	_json, english, ascii, utf8, gzip :=
-		"application/json", "en-US", "ascii", "utf8", "gzip"
+	_json, english, ascii, utf8, gzip := "application/json", "en-US", "ascii", "utf8", "gzip"
 	request := httptest.NewRequest("GET", "http://freer.ddns.net/thing", nil)
 	responseWriter := httptest.NewRecorder()
 	request.Header.Add("Accept", _json)

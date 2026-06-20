@@ -23,16 +23,14 @@ func (r Representation) FromBytes(b []byte) error {
 	return r.Base.FromBytes(b, &r)
 }
 
-var (
-	RepresentationBuilderFunc = func(ctx _representation.BuilderContext) representation.Representation {
-		r := Representation{}
-		r.SetContentType(ctx.ContentType)
-		r.SetContentLanguage(ctx.ContentLanguage)
-		r.SetContentCharset(ctx.ContentCharset)
-		r.SetContentEncoding(ctx.ContentEncoding)
-		r.SetContentLocation(ctx.ContentLocation)
-		r.SetContentFeatures(ctx.ContentFeatures)
-		r.SetSourceQuality(ctx.SourceQuality)
-		return r
-	}
-)
+var RepresentationBuilderFunc = func(ctx _representation.BuilderContext) representation.Representation {
+	r := Representation{}
+	r.SetContentType(ctx.ContentType)
+	r.SetContentLanguage(ctx.ContentLanguage)
+	r.SetContentCharset(ctx.ContentCharset)
+	r.SetContentEncoding(ctx.ContentEncoding)
+	r.SetContentLocation(ctx.ContentLocation)
+	r.SetContentFeatures(ctx.ContentFeatures)
+	r.SetSourceQuality(ctx.SourceQuality)
+	return r
+}

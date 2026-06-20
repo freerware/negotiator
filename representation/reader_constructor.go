@@ -29,9 +29,7 @@ var (
 	}
 
 	// newCompressReader is the constructor for the compress closeable reader.
-	newCompressReader EncodingReaderConstructor = func(r io.Reader) (io.ReadCloser, error) {
-		return zlib.NewReader(r)
-	}
+	newCompressReader EncodingReaderConstructor = zlib.NewReader
 
 	// newDeflateReader is the constructor for the deflate closeable reader.
 	newDeflateReader EncodingReaderConstructor = func(r io.Reader) (io.ReadCloser, error) {

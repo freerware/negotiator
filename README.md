@@ -4,9 +4,9 @@
 
 > A compact library for handling HTTP content negotiation for RESTful APIs.
 
-[![GoDoc][doc-img]][doc] [![Build Status][ci-img]][ci]
+[![GoDoc][doc-img]][doc] [![CI][ci-img]][ci]
 [![Coverage Status][coverage-img]][coverage] [![Release][release-img]][release]
-[![License][license-img]][license]
+[![License][license-img]][license] [![Go Report Card][report-img]][report]
 
 ## What is it?
 
@@ -230,34 +230,36 @@ how we do things.
 [zap]: https://github.com/uber-go/zap
 [tally]: https://github.com/uber-go/tally
 [tutor]: https://github.com/freerware/tutor
-[logger-doc]: https://godoc.org/go.uber.org/zap#Logger
-[scope-doc]: https://godoc.org/github.com/uber-go/tally#Scope
+[logger-doc]: https://pkg.go.dev/go.uber.org/zap#Logger
+[scope-doc]: https://pkg.go.dev/github.com/uber-go/tally#Scope
 [contributing]: https://github.com/freerware/negotiator/blob/master/CONTRIBUTING.md
 [apache-license]: https://github.com/freerware/negotiator/blob/master/LICENSE.txt
 [code-of-conduct]: https://github.com/freerware/negotiator/blob/master/CODE_OF_CONDUCT.md
 [gophercises]: https://gophercises.com
-[doc-img]: https://godoc.org/github.com/freerware/negotiator?status.svg
-[doc]: https://godoc.org/github.com/freerware/negotiator
-[ci-img]: https://travis-ci.com/freerware/negotiator.svg?branch=master
-[ci]: https://travis-ci.com/freerware/negotiator
+[doc-img]: https://pkg.go.dev/badge/github.com/freerware/negotiator.svg
+[doc]: https://pkg.go.dev/github.com/freerware/negotiator
+[ci-img]: https://github.com/freerware/negotiator/actions/workflows/ci.yml/badge.svg
+[ci]: https://github.com/freerware/negotiator/actions/workflows/ci.yml
 [coverage-img]: https://coveralls.io/repos/github/freerware/negotiator/badge.svg?branch=master
 [coverage]: https://coveralls.io/github/freerware/negotiator?branch=master
 [license]: https://opensource.org/licenses/Apache-2.0
 [license-img]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 [release]: https://github.com/freerware/negotiator/releases
 [release-img]: https://img.shields.io/github/tag/freerware/negotiator.svg?label=version
-[proactive-default-doc]: https://godoc.org/github.com/freerware/negotiator/proactive#pkg-variables
-[proactive-new-doc]: https://godoc.org/github.com/freerware/negotiator/proactive#New
-[proactive-logger-doc]: https://godoc.org/github.com/freerware/negotiator/proactive#pkg-variables
-[proactive-scope-doc]: https://godoc.org/github.com/freerware/negotiator/proactive#pkg-variables
-[reactive-default-doc]: https://godoc.org/github.com/freerware/negotiator/reactive#pkg-variables
-[reactive-new-doc]: https://godoc.org/github.com/freerware/negotiator/reactive#New
-[reactive-logger-doc]: https://godoc.org/github.com/freerware/negotiator/reactive#pkg-variables
-[reactive-scope-doc]: https://godoc.org/github.com/freerware/negotiator/reactive#pkg-variables
-[transparent-default-doc]: https://godoc.org/github.com/freerware/negotiator/transparent#pkg-variables
-[transparent-new-doc]: https://godoc.org/github.com/freerware/negotiator/transparent#New
-[transparent-logger-doc]: https://godoc.org/github.com/freerware/negotiator/transparent#pkg-variables
-[transparent-scope-doc]: https://godoc.org/github.com/freerware/negotiator/transparent#pkg-variables
+[report-img]: https://goreportcard.com/badge/github.com/freerware/negotiator
+[report]: https://goreportcard.com/report/github.com/freerware/negotiator
+[proactive-default-doc]: https://pkg.go.dev/github.com/freerware/negotiator/proactive#Default
+[proactive-new-doc]: https://pkg.go.dev/github.com/freerware/negotiator/proactive#New
+[proactive-logger-doc]: https://pkg.go.dev/github.com/freerware/negotiator/proactive#Logger
+[proactive-scope-doc]: https://pkg.go.dev/github.com/freerware/negotiator/proactive#Scope
+[reactive-default-doc]: https://pkg.go.dev/github.com/freerware/negotiator/reactive#Default
+[reactive-new-doc]: https://pkg.go.dev/github.com/freerware/negotiator/reactive#New
+[reactive-logger-doc]: https://pkg.go.dev/github.com/freerware/negotiator/reactive#Logger
+[reactive-scope-doc]: https://pkg.go.dev/github.com/freerware/negotiator/reactive#Scope
+[transparent-default-doc]: https://pkg.go.dev/github.com/freerware/negotiator/transparent#Default
+[transparent-new-doc]: https://pkg.go.dev/github.com/freerware/negotiator/transparent#New
+[transparent-logger-doc]: https://pkg.go.dev/github.com/freerware/negotiator/transparent#Logger
+[transparent-scope-doc]: https://pkg.go.dev/github.com/freerware/negotiator/transparent#Scope
 [rfc7231]: https://tools.ietf.org/html/rfc7231
 [rfc7231-5.3]: https://tools.ietf.org/html/rfc7231#section-5.3
 [rfc2295]: https://tools.ietf.org/html/rfc2295
