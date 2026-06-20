@@ -18,7 +18,7 @@ package header
 import "strings"
 
 // FeatureExpressionType indicates the operation the feature expression is
-// performing.pr
+// performing.pr.
 type FeatureExpressionType int
 
 // String provides the textual representation of the feature expression type.
@@ -36,7 +36,7 @@ func (t FeatureExpressionType) String() string {
 const (
 
 	// FeatureExpressionTypeExists indicates the feature expression is testing
-	// for existance of a particular feature.
+	// for existence of a particular feature.
 	FeatureExpressionTypeExists = iota
 
 	// FeatureExpressionTypeNotExists indicates the feature expression is
@@ -84,7 +84,7 @@ func (e FeatureExpression) Value() FeatureTagValue {
 }
 
 // HasValue determines if the feature expression has a feature tag value.
-// Existance, absence, and wildcard feature expressions do not have tag values.
+// Existence, absence, and wildcard feature expressions do not have tag values.
 func (e FeatureExpression) HasValue() bool {
 	_, ok := e.parseValue()
 	return ok
@@ -137,7 +137,7 @@ func (e FeatureExpression) parseTag() FeatureTag {
 }
 
 // parseValue takes the raw feature expression and parses the tag value.
-// the existance, absence, and wildcard expressions do not have tag values.
+// the existence, absence, and wildcard expressions do not have tag values.
 func (e FeatureExpression) parseValue() (val FeatureTagValue, ok bool) {
 	// check for negation ( ! ).
 	if strings.HasPrefix(e.String(), "!") {
@@ -153,7 +153,6 @@ func (e FeatureExpression) parseValue() (val FeatureTagValue, ok bool) {
 		// check for exclusive equality ( {...} ).
 		if strings.HasPrefix(s[1], "{") &&
 			strings.HasSuffix(s[1], "}") {
-
 			val, ok = FeatureTagValue(
 				strings.ReplaceAll(
 					strings.ReplaceAll(s[1], "}", ""), "{", "",

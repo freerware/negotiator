@@ -19,10 +19,8 @@ import (
 	"sort"
 )
 
-var (
-	// EmptySet is an empty representation set.
-	EmptySet = Set([]RankedRepresentation{})
-)
+// EmptySet is an empty representation set.
+var EmptySet = Set([]RankedRepresentation{})
 
 // Set represents a collection of representations.
 type Set []RankedRepresentation

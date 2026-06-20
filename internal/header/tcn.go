@@ -21,11 +21,9 @@ import (
 	"strings"
 )
 
-var (
-	// ErrEmptyTCNValue is an error that indicates that the TCN value cannot
-	// be empty.
-	ErrEmptyTCNValue = errors.New("TCN value cannot be empty")
-)
+// ErrEmptyTCNValue is an error that indicates that the TCN value cannot
+// be empty.
+var ErrEmptyTCNValue = errors.New("TCN value cannot be empty")
 
 // ResponseType represents the type of transparent negotiation response type.
 type ResponseType string
@@ -51,7 +49,7 @@ func (rt ResponseType) String() string {
 	return string(rt)
 }
 
-// OverrideDirective represents a server-side override performed when producting
+// OverrideDirective represents a server-side override performed when production
 // a response during transparent negotiation.
 type OverrideDirective string
 

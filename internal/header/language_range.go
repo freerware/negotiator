@@ -25,14 +25,14 @@ import (
 )
 
 var (
-	//defaultLanguageRange is the default language range.
+	// defaultLanguageRange is the default language range.
 	defaultLanguageRange = LanguageRange{
 		lrange: "*",
 		tag:    language.Und,
 		qValue: QualityValueMaximum,
 	}
 
-	// ErrEmptyLanguageRange is an error that indicates that the langauge
+	// ErrEmptyLanguageRange is an error that indicates that the language
 	// range cannot be empty.
 	ErrEmptyLanguageRange = errors.New("language range cannot be empty")
 )
@@ -109,7 +109,7 @@ func (lr LanguageRange) Compatible(tag string) bool {
 		return true
 	}
 	m := language.NewMatcher([]language.Tag{language.Und, lr.tag})
-	//_, i, _ := m.Match(t)
+	// _, i, _ := m.Match(t)
 	_, i := language.MatchStrings(m, tag)
 	return i != 0
 }

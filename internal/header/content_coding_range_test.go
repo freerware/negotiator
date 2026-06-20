@@ -31,7 +31,6 @@ func TestContentCodingTestSuite(t *testing.T) {
 }
 
 func (s *ContentCodingTestSuite) TestContentCoding_NewContentCodingRange() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -72,7 +71,6 @@ func (s *ContentCodingTestSuite) TestContentCoding_NewContentCodingRange() {
 }
 
 func (s *ContentCodingTestSuite) TestContentCoding_NewContentCodingRange_Compatible() {
-
 	tests := []struct {
 		name          string
 		contentCoding string
@@ -99,7 +97,6 @@ func (s *ContentCodingTestSuite) TestContentCoding_NewContentCodingRange_Compati
 }
 
 func (s *ContentCodingTestSuite) TestContentCoding_IsWildcard() {
-
 	tests := []struct {
 		name          string
 		contentCoding string
@@ -122,7 +119,6 @@ func (s *ContentCodingTestSuite) TestContentCoding_IsWildcard() {
 }
 
 func (s *ContentCodingTestSuite) TestContentCoding_IsCoding() {
-
 	tests := []struct {
 		name          string
 		contentCoding string
@@ -145,7 +141,6 @@ func (s *ContentCodingTestSuite) TestContentCoding_IsCoding() {
 }
 
 func (s *ContentCodingTestSuite) TestContentCoding_IsIdentity() {
-
 	tests := []struct {
 		name          string
 		contentCoding string
@@ -167,7 +162,6 @@ func (s *ContentCodingTestSuite) TestContentCoding_IsIdentity() {
 }
 
 func (s *ContentCodingTestSuite) TestContentCoding_QualityValue() {
-
 	tests := []struct {
 		name          string
 		contentCoding string
@@ -189,7 +183,6 @@ func (s *ContentCodingTestSuite) TestContentCoding_QualityValue() {
 }
 
 func (s *ContentCodingTestSuite) TestContentCoding_String() {
-
 	tests := []struct {
 		name          string
 		contentCoding string

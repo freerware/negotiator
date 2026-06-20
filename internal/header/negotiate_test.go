@@ -16,7 +16,6 @@ func TestNegotiateTestSuite(t *testing.T) {
 }
 
 func (s NegotiateTestSuite) TestNegotiate_NewNegotiate() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -44,7 +43,6 @@ func (s NegotiateTestSuite) TestNegotiate_NewNegotiate() {
 }
 
 func (s NegotiateTestSuite) TestNegotiate_Directives() {
-
 	tests := []struct {
 		name       string
 		directives []string
@@ -67,7 +65,6 @@ func (s NegotiateTestSuite) TestNegotiate_Directives() {
 }
 
 func (s NegotiateTestSuite) TestNegotiate_Contains() {
-
 	tests := []struct {
 		name       string
 		directives []string
@@ -119,7 +116,6 @@ func (s NegotiateTestSuite) TestNegotiate_Contains() {
 }
 
 func (s NegotiateTestSuite) TestNegotiate_ContainsRVSA() {
-
 	tests := []struct {
 		name       string
 		directives []string
@@ -155,7 +151,6 @@ func (s NegotiateTestSuite) TestNegotiate_ContainsRVSA() {
 }
 
 func (s NegotiateTestSuite) TestNegotiate_String() {
-
 	tests := []struct {
 		name       string
 		directives []string

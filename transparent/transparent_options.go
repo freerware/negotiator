@@ -52,7 +52,7 @@ var (
 	}
 
 	// RVSA defines the remove variant selection algorithm (RVSA) to leverage
-	// for transparant negotiation.
+	// for transparent negotiation.
 	RVSA = func(c representation.Chooser) Option {
 		return func(o *Options) {
 			o.Chooser = c

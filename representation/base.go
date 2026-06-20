@@ -21,7 +21,6 @@ import (
 	"encoding/xml"
 	"errors"
 	"io"
-	"io/ioutil"
 	"net/url"
 	"strings"
 
@@ -31,11 +30,11 @@ import (
 // Errors that can be encountered when serializing and deserializing representations.
 var (
 	// ErrUnsupportedContentEncoding indicates an error that occurs when the
-	// represention is given an unsupported content encoding.
+	// representing is given an unsupported content encoding.
 	ErrUnsupportedContentEncoding = errors.New("representation content encoding is not supported")
 
 	// ErrUnsupportedContentType indicates an error that occurs when the
-	// represention is given an unsupported content type.
+	// representing is given an unsupported content type.
 	ErrUnsupportedContentType = errors.New("representation content type is not supported")
 )
 
@@ -258,7 +257,7 @@ func (r *Base) decode(b []byte) (bb []byte, err error) {
 			err = reader.Close()
 		}()
 	}
-	if bb, err = ioutil.ReadAll(reader); err != nil {
+	if bb, err = io.ReadAll(reader); err != nil {
 		return
 	}
 	return

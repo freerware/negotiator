@@ -54,7 +54,7 @@ func (n Negotiate) Directives() []NegotiateDirective {
 func (n Negotiate) Contains(directives ...NegotiateDirective) (matches bool) {
 	for _, dir := range directives {
 		for _, d := range n.Directives() {
-			if matches = strings.ToLower(d.String()) == strings.ToLower(dir.String()); matches {
+			if matches = strings.EqualFold(d.String(), dir.String()); matches {
 				return
 			}
 		}
@@ -68,7 +68,7 @@ func (n Negotiate) ContainsRVSA(version string) (matches bool) {
 	for _, d := range n.Directives() {
 		rvsaDir := NegotiateDirective(version)
 		if matches = d.IsRVSAVersion() &&
-			strings.ToLower(rvsaDir.String()) == strings.ToLower(d.String()); matches {
+			strings.EqualFold(rvsaDir.String(), d.String()); matches {
 			return
 		}
 	}

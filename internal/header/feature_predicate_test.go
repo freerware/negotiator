@@ -81,18 +81,17 @@ func (s FeaturePredicateBagTestSuite) TestFeaturePredicateBag_String() {
 }
 
 func (s FeaturePredicateBagTestSuite) TestFeaturePredicateBag_Evaluate() {
-	supported, unsupported :=
+	supported, unsupported := header.FeatureSet(
+		map[header.FeatureTag][]header.FeatureTagValue{
+			header.FeatureTag("\"foo\""): {},
+			header.FeatureTag("yish"):    {header.FeatureTagValue("\"vam\"")},
+			header.FeatureTag("baz"):     {header.FeatureTagValue("1"), header.FeatureTagValue("5")},
+		},
+	),
 		header.FeatureSet(
 			map[header.FeatureTag][]header.FeatureTagValue{
-				header.FeatureTag("\"foo\""): []header.FeatureTagValue{},
-				header.FeatureTag("yish"):    []header.FeatureTagValue{header.FeatureTagValue("\"vam\"")},
-				header.FeatureTag("baz"):     []header.FeatureTagValue{header.FeatureTagValue("1"), header.FeatureTagValue("5")},
-			},
-		),
-		header.FeatureSet(
-			map[header.FeatureTag][]header.FeatureTagValue{
-				header.FeatureTag("\"bar\""): []header.FeatureTagValue{},
-				header.FeatureTag("meep"):    []header.FeatureTagValue{header.FeatureTagValue("\"enabled\"")},
+				header.FeatureTag("\"bar\""): {},
+				header.FeatureTag("meep"):    {header.FeatureTagValue("\"enabled\"")},
 			},
 		)
 	tests := []struct {
@@ -175,19 +174,18 @@ func (s FeaturePredicateTestSuite) TestFeaturePredicate_String() {
 }
 
 func (s FeaturePredicateTestSuite) TestFeaturePredicate_Evaluate() {
-	supported, unsupported :=
+	supported, unsupported := header.FeatureSet(
+		map[header.FeatureTag][]header.FeatureTagValue{
+			header.FeatureTag("\"foo\""): {},
+			header.FeatureTag("yish"):    {header.FeatureTagValue("\"vam\"")},
+			header.FeatureTag("baz"):     {header.FeatureTagValue("1"), header.FeatureTagValue("5")},
+			header.FeatureTag("meep"):    {},
+		},
+	),
 		header.FeatureSet(
 			map[header.FeatureTag][]header.FeatureTagValue{
-				header.FeatureTag("\"foo\""): []header.FeatureTagValue{},
-				header.FeatureTag("yish"):    []header.FeatureTagValue{header.FeatureTagValue("\"vam\"")},
-				header.FeatureTag("baz"):     []header.FeatureTagValue{header.FeatureTagValue("1"), header.FeatureTagValue("5")},
-				header.FeatureTag("meep"):    []header.FeatureTagValue{},
-			},
-		),
-		header.FeatureSet(
-			map[header.FeatureTag][]header.FeatureTagValue{
-				header.FeatureTag("\"bar\""): []header.FeatureTagValue{},
-				header.FeatureTag("meep"):    []header.FeatureTagValue{header.FeatureTagValue("\"enabled\"")},
+				header.FeatureTag("\"bar\""): {},
+				header.FeatureTag("meep"):    {header.FeatureTagValue("\"enabled\"")},
 			},
 		)
 	tests := []struct {

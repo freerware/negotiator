@@ -23,9 +23,7 @@ import (
 	"strings"
 )
 
-var (
-	charsetRangeRegex = regexp.MustCompile(`^([A-Za-z0-9-]+|\*)(;\s?q=(\d(\.\d{1,3})?))?$`)
-)
+var charsetRangeRegex = regexp.MustCompile(`^([A-Za-z0-9-]+|\*)(;\s?q=(\d(\.\d{1,3})?))?$`)
 
 var (
 	// defaultCharsetRange represents the default charset range.
@@ -102,7 +100,7 @@ func (c CharsetRange) Compatible(charset string) bool {
 	if c.IsWildcard() {
 		return true
 	}
-	return strings.ToLower(c.r) == strings.ToLower(charset)
+	return strings.EqualFold(c.r, charset)
 }
 
 // String provides a textual representation of the charset range.

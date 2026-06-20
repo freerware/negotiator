@@ -35,7 +35,7 @@ type List struct {
 	Representations []Metadata `json:"representations"`
 }
 
-// SetRepresentations modifies the represention list within the list representation.
+// SetRepresentations modifies the representing list within the list representation.
 func (l *List) SetRepresentations(reps ...Representation) {
 	for _, rep := range reps {
 		loc := rep.ContentLocation()

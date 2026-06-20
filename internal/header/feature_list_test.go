@@ -31,7 +31,6 @@ func TestFeatureListTestSuite(t *testing.T) {
 }
 
 func (s FeatureListTestSuite) TestFeatureList_NewFeatureList() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -59,18 +58,16 @@ func (s FeatureListTestSuite) TestFeatureList_NewFeatureList() {
 }
 
 func (s FeatureListTestSuite) TestFeatureList_QualityDegredation() {
-
-	supported, unsupported :=
+	supported, unsupported := header.FeatureSet(
+		map[header.FeatureTag][]header.FeatureTagValue{
+			header.FeatureTag("\"foo\""): {},
+			header.FeatureTag("yish"):    {header.FeatureTagValue("\"vam\"")},
+			header.FeatureTag("baz"):     {header.FeatureTagValue("1"), header.FeatureTagValue("5")},
+		}),
 		header.FeatureSet(
 			map[header.FeatureTag][]header.FeatureTagValue{
-				header.FeatureTag("\"foo\""): []header.FeatureTagValue{},
-				header.FeatureTag("yish"):    []header.FeatureTagValue{header.FeatureTagValue("\"vam\"")},
-				header.FeatureTag("baz"):     []header.FeatureTagValue{header.FeatureTagValue("1"), header.FeatureTagValue("5")},
-			}),
-		header.FeatureSet(
-			map[header.FeatureTag][]header.FeatureTagValue{
-				header.FeatureTag("\"bar\""): []header.FeatureTagValue{},
-				header.FeatureTag("meep"):    []header.FeatureTagValue{header.FeatureTagValue("\"enabled\"")},
+				header.FeatureTag("\"bar\""): {},
+				header.FeatureTag("meep"):    {header.FeatureTagValue("\"enabled\"")},
 			})
 
 	tests := []struct {
@@ -94,7 +91,6 @@ func (s FeatureListTestSuite) TestFeatureList_QualityDegredation() {
 }
 
 func (s FeatureListTestSuite) TestFeatureList_String() {
-
 	tests := []struct {
 		name     string
 		features []string
@@ -119,7 +115,6 @@ func (s FeatureListTestSuite) TestFeatureList_String() {
 			fl, err := header.NewFeatureList(test.features)
 			s.Require().NoError(err)
 			s.Equal(test.out, fl.String())
-
 		})
 	}
 }

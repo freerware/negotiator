@@ -31,7 +31,6 @@ func TestCharsetTestSuite(t *testing.T) {
 }
 
 func (s *CharsetTestSuite) TestCharset_NewCharsetRange() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -61,7 +60,6 @@ func (s *CharsetTestSuite) TestCharset_NewCharsetRange() {
 }
 
 func (s *CharsetTestSuite) TestCharset_NewCharsetRange_Compatible() {
-
 	tests := []struct {
 		name    string
 		charset string
@@ -87,7 +85,6 @@ func (s *CharsetTestSuite) TestCharset_NewCharsetRange_Compatible() {
 }
 
 func (s *CharsetTestSuite) TestCharset_IsWildcard() {
-
 	tests := []struct {
 		name    string
 		charset string
@@ -110,7 +107,6 @@ func (s *CharsetTestSuite) TestCharset_IsWildcard() {
 }
 
 func (s *CharsetTestSuite) TestCharset_IsCharset_NoQValue() {
-
 	tests := []struct {
 		name    string
 		charset string
@@ -133,7 +129,6 @@ func (s *CharsetTestSuite) TestCharset_IsCharset_NoQValue() {
 }
 
 func (s *CharsetTestSuite) TestCharset_QualityValue() {
-
 	tests := []struct {
 		name    string
 		charset string
@@ -155,7 +150,6 @@ func (s *CharsetTestSuite) TestCharset_QualityValue() {
 }
 
 func (s *CharsetTestSuite) TestCharset_String() {
-
 	tests := []struct {
 		name    string
 		charset string

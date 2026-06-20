@@ -1,21 +1,24 @@
 // Package proactive implements proactive content negotiation as defined in
 // RFC7231 Section 3.4.1.
 //
-// Construction
+// # Construction
 //
 // For out of the box proactive negotiation support, use proactive.Default,
 // which is the default proactive negotiator.
-//  //retrieves the default proactive negotiator.
-//  p := proactive.Default
+//
+//	//retrieves the default proactive negotiator.
+//	p := proactive.Default
+//
 // In situations where more customization is required, use the proactive.New
 // constructor function and specify options as arguments.
-//  //constructs a proactive negotiator with the provided options.
-//  p := proactive.New(
-//		proactive.DisableStrictMode(),
-//		proactive.DisableNotAcceptableRepresentation(),
-//  )
 //
-// Strict Mode
+//	 //constructs a proactive negotiator with the provided options.
+//	 p := proactive.New(
+//			proactive.DisableStrictMode(),
+//			proactive.DisableNotAcceptableRepresentation(),
+//	 )
+//
+// # Strict Mode
 //
 // According to RFC7231, when none of the representations match the values
 // provided for a particular proactive content negotiation header, the origin
@@ -28,7 +31,7 @@
 // proactive negotiation header, or disable strict mode for all. Strict mode
 // is enabled for all headers by default.
 //
-// See Also
+// # See Also
 //
 // ➣ https://tools.ietf.org/html/rfc7231#section-3.4.1
 //

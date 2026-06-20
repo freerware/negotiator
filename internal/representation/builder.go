@@ -47,7 +47,7 @@ func (b Builder) WithCharset(cc string) Builder {
 }
 
 // WithLocation associates the provided content location with the
-// representation to be built
+// representation to be built.
 func (b Builder) WithLocation(loc url.URL) Builder {
 	b.loc = loc
 	return b

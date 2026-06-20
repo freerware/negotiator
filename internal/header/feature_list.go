@@ -48,9 +48,9 @@ func (fl FeatureList) QualityDegradation(supported, unsupported FeatureSet) floa
 	degradation := float32(1.0)
 	for _, element := range fl {
 		if element.Evaluate(supported, unsupported) {
-			degradation = degradation * element.TrueImprovement().Float()
+			degradation *= element.TrueImprovement().Float()
 		} else {
-			degradation = degradation * element.FalseDegradation().Float()
+			degradation *= element.FalseDegradation().Float()
 		}
 	}
 	return degradation

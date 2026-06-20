@@ -27,7 +27,7 @@ import (
 // Many of the request header fields for proactive negotiation use a
 // common parameter, named "q" (case-insensitive), to assign a relative
 // "weight" to the preference for that associated kind of content.  This
-// weight is referred to as a "quality value" (or "qvalue")
+// weight is referred to as a "quality value" (or "qvalue").
 type QualityValue float32
 
 const (
@@ -42,10 +42,8 @@ const (
 	QualityValueDefault QualityValue = QualityValueMaximum
 )
 
-var (
-	// ErrInvalidQualityValue is an error that indicates that the quality value must be between 0.0 and 1.0.
-	ErrInvalidQualityValue = errors.New("quality range must be between 0.0 and 1.0")
-)
+// ErrInvalidQualityValue is an error that indicates that the quality value must be between 0.0 and 1.0.
+var ErrInvalidQualityValue = errors.New("quality range must be between 0.0 and 1.0")
 
 // NewQualityValue constructs a new quality value using the provided number.
 //
@@ -53,8 +51,7 @@ var (
 // where 0.001 is the least preferred and 1 is the most preferred; a
 // value of 0 means "not acceptable".
 func NewQualityValue(qvalue float32) (QualityValue, error) {
-	tooLow, tooHigh :=
-		qvalue < QualityValueMinimum.Float(),
+	tooLow, tooHigh := qvalue < QualityValueMinimum.Float(),
 		qvalue > QualityValueMaximum.Float()
 	if tooLow || tooHigh {
 		return QualityValue(0), ErrInvalidQualityValue

@@ -16,7 +16,6 @@ func TestAcceptCharsetTestSuite(t *testing.T) {
 }
 
 func (s AcceptCharsetTestSuite) TestAcceptCharset_NewAcceptCharset() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -74,7 +73,6 @@ func (s AcceptCharsetTestSuite) TestAcceptCharset_CharsetRanges() {
 }
 
 func (s AcceptCharsetTestSuite) TestAcceptCharset_Compatible() {
-
 	tests := []struct {
 		name     string
 		charsets []string
@@ -103,7 +101,6 @@ func (s AcceptCharsetTestSuite) TestAcceptCharset_Compatible() {
 }
 
 func (s AcceptCharsetTestSuite) TestAcceptCharset_IsEmpty() {
-
 	tests := []struct {
 		name string
 		in   []string
@@ -124,7 +121,6 @@ func (s AcceptCharsetTestSuite) TestAcceptCharset_IsEmpty() {
 }
 
 func (s AcceptCharsetTestSuite) TestAcceptCharset_String() {
-
 	tests := []struct {
 		name string
 		in   []string

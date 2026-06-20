@@ -34,7 +34,7 @@ type httpd struct {
 }
 
 // ApacheHTTPD provides the Apache HTTP server proactive content
-// negotation algorithm.
+// negotiation algorithm.
 func ApacheHTTPD() representation.Chooser {
 	filters := []filter{
 		// step 2.1
@@ -59,8 +59,8 @@ func ApacheHTTPD() representation.Chooser {
 
 // Chooser determines the 'best' representation from the provided set.
 func (c httpd) Choose(
-	r *http.Request, reps ...representation.Representation) (representation.Representation, error) {
-
+	r *http.Request, reps ...representation.Representation,
+) (representation.Representation, error) {
 	var (
 		a   header.Accept
 		ae  header.AcceptEncoding
@@ -96,9 +96,8 @@ func (c httpd) Choose(
 		ql, los := c.acceptLanguageQuality(rp, al)
 		qe := c.acceptEncodingQuality(rp, ae)
 
-		shouldEliminate :=
-			qt == header.QualityValueMinimum || qc == header.QualityValueMinimum ||
-				qe == header.QualityValueMinimum || ql == header.QualityValueMinimum
+		shouldEliminate := qt == header.QualityValueMinimum || qc == header.QualityValueMinimum ||
+			qe == header.QualityValueMinimum || ql == header.QualityValueMinimum
 		if shouldEliminate {
 			continue
 		}
@@ -137,23 +136,23 @@ var (
 		variants.Sort(func(i, j int) bool {
 			// sort smallest to largest.
 			var f, s int
-			if bytes, err := variants[i].Representation.Bytes(); err != nil {
+			if bytes, err := variants[i].Bytes(); err == nil {
 				f = len(bytes)
 			}
-			if bytes, err := variants[j].Representation.Bytes(); err != nil {
+			if bytes, err := variants[j].Bytes(); err == nil {
 				s = len(bytes)
 			}
-			return f > s
+			return f < s
 		})
 		lowest := variants.First()
-		lowestBytes, err := lowest.Representation.Bytes()
+		lowestBytes, err := lowest.Bytes()
 		if err != nil {
 			return representation.EmptySet, err
 		}
 		lowestLength := len(lowestBytes)
 		return variants.Where(func(v representation.RankedRepresentation) bool {
 			var length int
-			if bytes, err := v.Representation.Bytes(); err == nil {
+			if bytes, err := v.Bytes(); err == nil {
 				length = len(bytes)
 			}
 			return length == lowestLength
@@ -179,7 +178,7 @@ var (
 	// if all variants have ISO-8859-1, select all variants instead.
 	notISO88591 filter = func(variants representation.Set) (representation.Set, error) {
 		notISO88591 := variants.Where(func(v representation.RankedRepresentation) bool {
-			return strings.ToLower(v.Representation.ContentCharset()) != "iso-8859-1"
+			return strings.ToLower(v.ContentCharset()) != "iso-8859-1"
 		})
 		// only filter for variants that are not ISO8859-1 charset if
 		// not all are ISO8859-1.
@@ -207,24 +206,20 @@ var (
 	// bestSourceAndType selects the variants with best media type and source quality.
 	bestSourceAndType filter = func(variants representation.Set) (representation.Set, error) {
 		variants.Sort(func(i, j int) bool {
-			fsq, fmtqv :=
-				header.QualityValue(variants[i].SourceQualityValue),
+			fsq, fmtqv := header.QualityValue(variants[i].SourceQualityValue),
 				header.QualityValue(variants[i].MediaTypeQualityValue)
 			first := fsq.Multiply(fmtqv)
-			ssq, smtqv :=
-				header.QualityValue(variants[j].SourceQualityValue),
+			ssq, smtqv := header.QualityValue(variants[j].SourceQualityValue),
 				header.QualityValue(variants[j].MediaTypeQualityValue)
 			second := ssq.Multiply(smtqv)
 			return first.GreaterThan(second)
 		})
 		highest := variants.First()
-		hsqv, hmtqv :=
-			header.QualityValue(highest.SourceQualityValue),
+		hsqv, hmtqv := header.QualityValue(highest.SourceQualityValue),
 			header.QualityValue(highest.MediaTypeQualityValue)
 		highestScore := hsqv.Multiply(hmtqv)
 		return variants.Where(func(v representation.RankedRepresentation) bool {
-			sqv, mtqv :=
-				header.QualityValue(v.SourceQualityValue),
+			sqv, mtqv := header.QualityValue(v.SourceQualityValue),
 				header.QualityValue(v.MediaTypeQualityValue)
 			qv := sqv.Multiply(mtqv)
 			highestqv := header.QualityValue(highestScore)
@@ -262,7 +257,7 @@ var (
 	bestLevel filter = func(variants representation.Set) (representation.Set, error) {
 		var htmlWithLevel []hwl
 		for _, v := range variants {
-			mt, p, err := mime.ParseMediaType(v.Representation.ContentType())
+			mt, p, err := mime.ParseMediaType(v.ContentType())
 			if err != nil {
 				return nil, err
 			}

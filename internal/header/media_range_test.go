@@ -32,14 +32,13 @@ func TestMediaRangeTestSuite(t *testing.T) {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_NewMediaRange() {
-
 	tests := []struct {
 		name string
 		in   string
 		err  error
 	}{
 		{"JSON", "application/json", nil},
-		//{"Invalid", "jibberish", header.ErrInvalidMediaRange},
+		// {"Invalid", "jibberish", header.ErrInvalidMediaRange},
 		//{"InvalidWithQValue", "jibberish;q=0.5", header.ErrInvalidMediaRange},
 		{"Empty", "", header.ErrEmptyMediaRange},
 	}
@@ -62,7 +61,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_NewMediaRange() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_NewMediaRange_Compatible() {
-
 	tests := []struct {
 		name       string
 		mediaRange string
@@ -76,7 +74,7 @@ func (s *MediaRangeTestSuite) TestMediaRange_NewMediaRange_Compatible() {
 		{"MatchUpperCase", "application/xml", "APPLICATION/XML", true, nil},
 		{"MatchWithQValue", "application/xml;q=0.9", "APPLICATION/XML", true, nil},
 		{"NoMatch", "application/json", "application/xml", false, nil},
-		//{"Invalid", "application/json", "zoink", false, nil},
+		// {"Invalid", "application/json", "zoink", false, nil},
 	}
 
 	for _, test := range tests {
@@ -97,7 +95,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_NewMediaRange_Compatible() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_IsTypeWildcard() {
-
 	tests := []struct {
 		name       string
 		mediaRange string
@@ -120,7 +117,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_IsTypeWildcard() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_IsSubTypeWildcard() {
-
 	tests := []struct {
 		name       string
 		mediaRange string
@@ -143,7 +139,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_IsSubTypeWildcard() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_Param() {
-
 	tests := []struct {
 		name       string
 		mediaRange string
@@ -170,7 +165,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_Param() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_Type() {
-
 	tests := []struct {
 		name       string
 		mediaRange string
@@ -193,7 +187,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_Type() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_Precedence() {
-
 	tests := []struct {
 		name       string
 		mediaRange string
@@ -220,7 +213,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_Precedence() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_SubType() {
-
 	tests := []struct {
 		name       string
 		mediaRange string
@@ -243,7 +235,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_SubType() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_QualityValue() {
-
 	tests := []struct {
 		name       string
 		mediaRange string
@@ -265,7 +256,6 @@ func (s *MediaRangeTestSuite) TestMediaRange_QualityValue() {
 }
 
 func (s *MediaRangeTestSuite) TestMediaRange_String() {
-
 	tests := []struct {
 		name       string
 		mediaRange string

@@ -48,8 +48,7 @@ func NewAcceptLanguage(acceptLanguage []string) (AcceptLanguage, error) {
 	if len(acceptLanguage) == 0 {
 		return EmptyAcceptLanguage, nil
 	}
-	tags, qValues, err :=
-		language.ParseAcceptLanguage(strings.Join(acceptLanguage, ","))
+	tags, qValues, err := language.ParseAcceptLanguage(strings.Join(acceptLanguage, ","))
 	if err != nil {
 		return EmptyAcceptLanguage, err
 	}

@@ -22,7 +22,7 @@ import (
 )
 
 // NegotiationContext represents the context, such as the nature of the request
-// and request itself, in which content negotiation is occuring.
+// and request itself, in which content negotiation is occurring.
 type NegotiationContext struct {
 	ResponseWriter http.ResponseWriter
 	Request        *http.Request

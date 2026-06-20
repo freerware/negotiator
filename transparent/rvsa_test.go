@@ -87,7 +87,6 @@ func (s *RVSATestSuite) TestRVSA_Choose_NoRepresentation() {
 }
 
 func (s *RVSATestSuite) TestRVSA_Choose() {
-
 	// arrange.
 	var (
 		html       = "text/html"
@@ -135,7 +134,6 @@ func (s *RVSATestSuite) TestRVSA_Choose() {
 }
 
 func (s *RVSATestSuite) TestRVSA_Choose_NotDefinite_MissingAccept() {
-
 	// arrange.
 	var (
 		html       = "text/html"
@@ -181,7 +179,6 @@ func (s *RVSATestSuite) TestRVSA_Choose_NotDefinite_MissingAccept() {
 }
 
 func (s *RVSATestSuite) TestRVSA_Choose_NotDefinite_MissingAcceptLanguage() {
-
 	// arrange.
 	var (
 		html       = "text/html"
@@ -228,7 +225,6 @@ func (s *RVSATestSuite) TestRVSA_Choose_NotDefinite_MissingAcceptLanguage() {
 }
 
 func (s *RVSATestSuite) TestRVSA_Choose_NotDefinite_MissingAcceptCharset() {
-
 	// arrange.
 	var (
 		html     = "text/html"
@@ -272,7 +268,6 @@ func (s *RVSATestSuite) TestRVSA_Choose_NotDefinite_MissingAcceptCharset() {
 }
 
 func (s *RVSATestSuite) TestRVSA_Choose_ZeroQualityFactor() {
-
 	// arrange.
 	var (
 		html      = "text/html"

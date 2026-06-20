@@ -31,7 +31,6 @@ func TestNegotiateDirectiveTestSuite(t *testing.T) {
 }
 
 func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_NewNegotiateDirective() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -57,7 +56,6 @@ func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_NewNegotiateDirectiv
 }
 
 func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_IsWildcard() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -78,7 +76,6 @@ func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_IsWildcard() {
 }
 
 func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_IsRVSAVersion() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -99,7 +96,6 @@ func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_IsRVSAVersion() {
 }
 
 func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_IsExtension() {
-
 	tests := []struct {
 		name string
 		in   string
@@ -120,7 +116,6 @@ func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_IsExtension() {
 }
 
 func (s NegotiateDirectiveTestSuite) TestNegotiateDirective_String() {
-
 	tests := []struct {
 		name string
 		in   string
