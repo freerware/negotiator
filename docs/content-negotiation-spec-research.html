@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>negotiator &mdash; HTTP Content Negotiation Specification Research</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel-2:#1c2330; --ink:#e6edf3; --muted:#9aa7b4;
+    --line:#2a3340; --accent:#5aa7ff; --accent-2:#7ee787;
+    --crit:#ff6b6b; --high:#ff9f43; --med:#f7c948; --low:#7ee787; --info:#79c0ff;
+    --mono:"SFMono-Regular", "JetBrains Mono",Consolas,"Liberation Mono",Menlo,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f6f8fa; --panel:#ffffff; --panel-2:#f0f3f6; --ink:#1f2328; --muted:#57606a;
+      --line:#d0d7de; --accent:#0969da; --accent-2:#1a7f37; --info:#0969da; }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;font-size:16px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  header.masthead{
+    background:linear-gradient(160deg,var(--panel-2),var(--panel));
+    border-bottom:1px solid var(--line);padding:56px 0 40px;
+  }
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+  h1{font-size:2.5rem;line-height:1.15;margin:0 0 12px;font-weight:700;letter-spacing:-.02em}
+  h1 .pkg{font-family:var(--mono);color:var(--accent-2)}
+  .lede{color:var(--muted);max-width:70ch;font-size:1.06rem;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:24px;font-size:13px;color:var(--muted);font-family:var(--mono)}
+  .meta b{color:var(--ink);font-weight:600}
+
+  main{padding:8px 0 80px}
+  section{padding-top:46px;margin-top:6px;border-top:1px solid transparent}
+  h2{font-size:1.55rem;margin:0 0 6px;letter-spacing:-.01em;scroll-margin-top:20px}
+  h2 .num{font-family:var(--mono);color:var(--accent);font-size:1rem;margin-right:10px}
+  h3{font-size:1.16rem;margin:30px 0 8px}
+  h4{font-size:1rem;margin:22px 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-family:var(--mono)}
+  p{margin:10px 0}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{font-family:var(--mono);font-size:.86em;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:5px;padding:.08em .4em}
+  .ref{font-family:var(--mono);font-size:.8em;color:var(--muted);white-space:nowrap}
+
+  .toc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-top:34px}
+  .toc h2{font-size:.85rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);border:0;margin:0 0 12px;padding:0}
+  .toc ol{margin:0;padding-left:20px;columns:2;column-gap:40px}
+  .toc li{margin:5px 0;break-inside:avoid}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:18px 0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+  .stat .k{font-family:var(--mono);font-size:1.9rem;font-weight:700;line-height:1}
+  .stat .l{color:var(--muted);font-size:.86rem;margin-top:6px}
+
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.92rem;display:block;overflow-x:auto}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+  th{background:var(--panel-2);font-weight:600;white-space:nowrap}
+  tbody tr:nth-child(even){background:rgba(127,127,127,.05)}
+
+  .badge{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;padding:2px 8px;border-radius:999px;border:1px solid;white-space:nowrap}
+  .b-crit{color:var(--crit);border-color:var(--crit)}
+  .b-high{color:var(--high);border-color:var(--high)}
+  .b-med{color:var(--med);border-color:var(--med)}
+  .b-low{color:var(--low);border-color:var(--low)}
+  .b-info{color:var(--info);border-color:var(--info)}
+  .b-ok{color:var(--accent-2);border-color:var(--accent-2)}
+
+  .finding{background:var(--panel);border:1px solid var(--line);border-left-width:4px;border-radius:10px;padding:18px 20px;margin:16px 0}
+  .finding.s-high{border-left-color:var(--high)}
+  .finding.s-med{border-left-color:var(--med)}
+  .finding.s-low{border-left-color:var(--low)}
+  .finding.s-info{border-left-color:var(--info)}
+  .finding .head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:6px}
+  .finding .id{font-family:var(--mono);font-weight:700;color:var(--accent)}
+  .finding .title{font-weight:600;font-size:1.05rem}
+  .finding dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px;margin:10px 0 0;font-size:.92rem}
+  .finding dt{color:var(--muted);font-family:var(--mono);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+  .finding dd{margin:0}
+  .loc{font-family:var(--mono);font-size:.84em}
+
+  blockquote{margin:14px 0;padding:10px 16px;border-left:3px solid var(--accent);background:var(--panel-2);
+    border-radius:0 8px 8px 0;color:var(--muted)}
+  blockquote p{margin:4px 0}
+  .callout{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:16px 0}
+  .callout .t{font-weight:700;margin-bottom:4px}
+
+  pre{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;
+    font-family:var(--mono);font-size:.84rem;line-height:1.5}
+  ul.tight li{margin:4px 0}
+
+  footer{border-top:1px solid var(--line);padding:30px 0 60px;color:var(--muted);font-size:.86rem}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:8px 0 0;font-size:.82rem;color:var(--muted)}
+  hr{border:0;border-top:1px solid var(--line);margin:26px 0}
+  @media (max-width:680px){ .toc ol{columns:1} h1{font-size:2rem} .finding dl{grid-template-columns:1fr} }
+  @media print{ body{background:#fff;color:#000} header.masthead{background:#fff} .finding,.card,.stat{break-inside:avoid} a{color:#000} }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Specification Conformance Research</p>
+    <h1>HTTP Content Negotiation in <span class="pkg">negotiator</span></h1>
+    <p class="lede">A deep read of the specifications this library set out to implement &mdash; proactive,
+      reactive, and transparent content negotiation &mdash; and a catalogue of the discrepancies between
+      what those specifications require and what the code actually does.</p>
+    <div class="meta">
+      <span>Subject: <b>github.com/freerware/negotiator</b></span>
+      <span>Commit: <b>d4cf974</b></span>
+      <span>Go: <b>1.22</b></span>
+      <span>Compiled: <b>2026-06-20</b></span>
+      <span>Status: <b>Research / advisory</b></span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Contents</h2>
+    <ol>
+      <li><a href="#summary">Executive summary</a></li>
+      <li><a href="#method">Scope &amp; method</a></li>
+      <li><a href="#landscape">The specification landscape</a></li>
+      <li><a href="#architecture">How the library is built</a></li>
+      <li><a href="#proactive">Proactive negotiation</a></li>
+      <li><a href="#reactive">Reactive negotiation</a></li>
+      <li><a href="#transparent">Transparent negotiation</a></li>
+      <li><a href="#crosscutting">Cross-cutting issues</a></li>
+      <li><a href="#catalog">Discrepancy catalogue</a></li>
+      <li><a href="#recommendations">Recommendations</a></li>
+      <li><a href="#references">References</a></li>
+    </ol>
+  </nav>
+
+  <!-- ============================================================= -->
+  <section id="summary">
+    <h2><span class="num">01</span>Executive summary</h2>
+    <p><code>negotiator</code> is an admirably ambitious library. It is one of very few Go projects that
+      attempts to implement <em>all three</em> of the content-negotiation strategies described in the HTTP
+      specifications &mdash; <strong>proactive</strong> (server-driven), <strong>reactive</strong>
+      (agent-driven), and <strong>transparent</strong> &mdash; rather than just parsing an <code>Accept</code>
+      header and calling it a day. The transparent path in particular implements the Remote Variant Selection
+      Algorithm (RVSA/1.0) and the Alternates/TCN/Negotiate header machinery, which almost nothing in the wild
+      bothers to do.</p>
+
+    <p>The core algorithms are faithful in spirit. The Apache <code>httpd</code> selection algorithm is
+      reproduced step-for-step, and the RVSA quality computation follows RFC&nbsp;2296 closely (including the
+      round-to-five-decimals rule that Apache itself skips). The discrepancies that follow are therefore mostly
+      about <em>edges</em>: standards that moved underneath the code, HTTP wire-format details, and a handful of
+      places where a representation is dropped (or a panic is raised) when the specification would have it
+      served or surfaced as an error.</p>
+
+    <div class="grid">
+      <div class="stat"><div class="k">3</div><div class="l">negotiation strategies implemented</div></div>
+      <div class="stat"><div class="k">5+</div><div class="l">specifications / algorithms in scope</div></div>
+      <div class="stat"><div class="k">20</div><div class="l">discrepancies catalogued</div></div>
+      <div class="stat"><div class="k" style="color:var(--high)">3</div><div class="l">rated High severity</div></div>
+    </div>
+
+    <div class="callout">
+      <div class="t">The three headline findings</div>
+      <ul class="tight">
+        <li><strong>No <code>Vary</code> header is ever emitted.</strong> Every negotiated response is
+          cache-poisonable, because downstream caches are never told which request headers drove the choice
+          (RFC&nbsp;9110 &sect;12.5.5). <span class="badge b-high">High</span></li>
+        <li><strong>A non-existent <code>Content-Charset</code> response header is written on every response.</strong>
+          HTTP has no such field; charset travels in the <code>charset</code> parameter of
+          <code>Content-Type</code>. <span class="badge b-high">High</span></li>
+        <li><strong>The library is written against RFC&nbsp;7231, which has been obsoleted</strong> by
+          RFC&nbsp;9110 (June&nbsp;2022). Among other things, RFC&nbsp;9110 <em>deprecates</em>
+          <code>Accept-Charset</code> &mdash; a header the library treats as a first-class negotiation
+          dimension with its own strict mode. <span class="badge b-high">High</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="method">
+    <h2><span class="num">02</span>Scope &amp; method</h2>
+    <p>This document compares the library&rsquo;s source at commit <code>d4cf974</code> against the primary
+      sources it cites or implements. Each finding records a specification clause, the responsible source
+      location (<code class="loc">path:line</code>), the observed behaviour, and a severity. Severities reflect
+      protocol/interoperability impact, not difficulty of fixing:</p>
+    <div class="legend">
+      <span><span class="badge b-high">High</span> breaks interoperability or caching correctness on the wire</span>
+      <span><span class="badge b-med">Med</span> wrong outcome in a definable class of requests</span>
+      <span><span class="badge b-low">Low</span> narrow / cosmetic / metrics</span>
+      <span><span class="badge b-info">Info</span> currency, robustness, or design note</span>
+      <span><span class="badge b-ok">Conformant</span> verified to match the spec</span>
+    </div>
+    <p style="margin-top:14px">Specifications were cross-checked against current sources where reachable; the
+      Apache algorithm tail (steps 6&ndash;9) and the RFC&nbsp;9110 <code>Accept-Charset</code> deprecation were
+      confirmed against the live Apache 2.4 documentation and RFC&nbsp;9110 commentary respectively. See
+      <a href="#references">References</a>.</p>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="landscape">
+    <h2><span class="num">03</span>The specification landscape</h2>
+    <p>&ldquo;Content negotiation&rdquo; is not one specification but a small constellation of them, written
+      across two decades and at very different levels of maturity. Understanding the discrepancies requires
+      first understanding that the ground has shifted.</p>
+
+    <table>
+      <thead><tr><th>Document</th><th>Defines</th><th>Status today</th><th>Used by</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="ref">RFC&nbsp;7231 &sect;3.4, &sect;5.3</td>
+          <td>Proactive &amp; reactive negotiation; <code>Accept</code>, <code>Accept-Language</code>,
+            <code>Accept-Charset</code>, <code>Accept-Encoding</code>; quality values</td>
+          <td><span class="badge b-high">Obsoleted</span> by RFC&nbsp;9110 (2022)</td>
+          <td>proactive, reactive</td>
+        </tr>
+        <tr>
+          <td class="ref">RFC&nbsp;9110 &sect;12</td>
+          <td>The current HTTP Semantics; same negotiation model, but <code>Accept-Charset</code> deprecated,
+            <code>Vary</code> guidance retained</td>
+          <td><span class="badge b-ok">Internet Standard</span> (STD&nbsp;97)</td>
+          <td>&mdash; (not referenced)</td>
+        </tr>
+        <tr>
+          <td class="ref">RFC&nbsp;2295</td>
+          <td>Transparent Content Negotiation: <code>Negotiate</code>, <code>Alternates</code>, <code>TCN</code>,
+            <code>Accept-Features</code>, feature lists, the <code>506</code> status</td>
+          <td><span class="badge b-info">Experimental</span> (never standardised)</td>
+          <td>transparent</td>
+        </tr>
+        <tr>
+          <td class="ref">RFC&nbsp;2296</td>
+          <td>The Remote Variant Selection Algorithm (RVSA/1.0) and overall-quality computation</td>
+          <td><span class="badge b-info">Experimental</span></td>
+          <td>transparent (RVSA1)</td>
+        </tr>
+        <tr>
+          <td class="ref">Apache <code>httpd</code> 2.4</td>
+          <td>A concrete, ordered server-driven selection algorithm (de-facto industry standard)</td>
+          <td>Living documentation</td>
+          <td>proactive (ApacheHTTPD chooser)</td>
+        </tr>
+        <tr>
+          <td class="ref">RFC&nbsp;4647</td>
+          <td>Language-range matching (Basic/Extended Filtering &amp; Lookup)</td>
+          <td><span class="badge b-ok">Best Current Practice</span></td>
+          <td>(referenced by RFC&nbsp;7231 &sect;5.3.5; see&nbsp;D14)</td>
+        </tr>
+        <tr>
+          <td class="ref">RFC&nbsp;2068 / 2616</td>
+          <td>Historic HTTP/1.1; URL-equivalence rules reused for the neighbour test</td>
+          <td><span class="badge b-high">Obsolete</span></td>
+          <td>transparent (same-URL test)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="t">Two of the four core specs are Experimental and effectively dead on the wire</div>
+      <p style="margin:0">RFC&nbsp;2295 and RFC&nbsp;2296 never advanced beyond Experimental and saw almost no
+        client adoption; mainstream browsers do not send <code>Negotiate</code> or understand
+        <code>Alternates</code>/<code>TCN</code>. This does not make the library wrong &mdash; implementing them
+        is the whole point &mdash; but it frames the transparent findings below as conformance-to-an-experiment
+        rather than conformance-to-the-live-web.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="architecture">
+    <h2><span class="num">04</span>How the library is built</h2>
+    <p>The design is clean and maps directly onto the specification taxonomy. A single
+      <code>Negotiator</code> interface (<code class="loc">negotiator.go</code>) is implemented three times,
+      one per strategy, each constructed with functional options and each delegating the &ldquo;which variant
+      wins&rdquo; decision to a pluggable <code>representation.Chooser</code>:</p>
+    <pre>negotiator.Negotiator         interface { Negotiate(ctx, ...Representation) error }
+ &#9500;&#9472; proactive.Negotiator       &rarr; Chooser = ApacheHTTPD()   (8 ordered filters)
+ &#9500;&#9472; reactive.Negotiator        &rarr; emits 300 Multiple Choices + list body
+ &#9492;&#9472; transparent.Negotiator     &rarr; Chooser = RVSA1()       (RFC 2296 overall quality)
+
+internal/header/*   parsing &amp; modelling of every Accept-* / Negotiate / Alternates / TCN field
+representation/*     the Representation model, the List representation, source-quality, marshalling</pre>
+    <p>The <code>internal/header</code> package is where the specifications are encoded most literally &mdash;
+      media ranges, charset/coding/language ranges, quality values, feature lists and predicate bags &mdash; and
+      it is where most of the wire-format findings live. The <code>representation</code> package supplies the
+      content (JSON/XML/YAML marshalling, gzip/deflate/compress encoding) and the metadata (media type, charset,
+      language, encoding, features, source quality) that the choosers rank.</p>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="proactive">
+    <h2><span class="num">05</span>Proactive (server-driven) negotiation</h2>
+    <p class="ref">RFC&nbsp;7231 &sect;3.4.1 / RFC&nbsp;9110 &sect;12.1&ndash;12.5 &middot; Apache httpd 2.4 algorithm
+      &middot; source: <code>proactive/proactive.go</code>, <code>proactive/apache_httpd.go</code></p>
+
+    <p>The proactive flow parses <code>Accept</code>, <code>Accept-Language</code> and <code>Accept-Charset</code>;
+      runs a per-header &ldquo;strict mode&rdquo; check that returns <code>406</code> when no representation is
+      compatible with a header that is configured strict; and otherwise hands the set to the Apache chooser to
+      pick the best variant (or <code>406</code> if none survives).</p>
+
+    <h3>The Apache algorithm is reproduced faithfully <span class="badge b-ok">Conformant</span></h3>
+    <p>The eight filters in <code class="loc">apache_httpd.go:39-56</code> line up one-to-one with the published
+      Apache 2.4 dimensions, with <code>variants.First()</code> standing in for the final &ldquo;select the first
+      remaining variant&rdquo; tie-break (Apache step&nbsp;9):</p>
+    <table>
+      <thead><tr><th>Apache step</th><th>Library filter</th><th>Location</th></tr></thead>
+      <tbody>
+        <tr><td>1 &mdash; source quality &times; media-type quality</td><td><code>bestSourceAndType</code></td><td class="loc">apache_httpd.go:207</td></tr>
+        <tr><td>2 &mdash; best language quality</td><td><code>bestLanguage</code></td><td class="loc">:231</td></tr>
+        <tr><td>3 &mdash; order in <code>Accept-Language</code></td><td><code>bestLanguageOrder</code></td><td class="loc">:246</td></tr>
+        <tr><td>4 &mdash; highest <code>level</code> media param</td><td><code>bestLevel</code></td><td class="loc">:257</td></tr>
+        <tr><td>5 &mdash; best charset</td><td><code>bestCharset</code></td><td class="loc">:192</td></tr>
+        <tr><td>6 &mdash; drop ISO-8859-1 unless all are</td><td><code>notISO88591</code></td><td class="loc">:179</td></tr>
+        <tr><td>7 &mdash; best encoding</td><td><code>bestEncoding</code></td><td class="loc">:163</td></tr>
+        <tr><td>8 &mdash; smallest content length</td><td><code>smallestContentLength</code></td><td class="loc">:135</td></tr>
+        <tr><td>9 &mdash; first remaining variant</td><td><code>variants.First()</code></td><td class="loc">apache_httpd.go:130</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Where it diverges</h3>
+    <p>The divergences (detailed in the <a href="#catalog">catalogue</a> as D5&ndash;D9, D14) cluster around two
+      ideas. First, <strong>up-front global elimination</strong>: the chooser discards any variant whose quality
+      in <em>any</em> dimension rounds to zero before the ordered filters even run
+      (<code class="loc">apache_httpd.go:99-103</code>). Apache instead applies elimination per-step and, crucially,
+      gives a language with no <code>Accept-Language</code> match a tiny non-zero quality rather than zero &mdash;
+      so Apache can still serve a language-mismatched variant as a last resort where this library returns
+      <code>406</code> (D7).</p>
+    <p>Second, <strong>quality values are read but the &ldquo;not acceptable&rdquo; (<code>q=0</code>) meaning is
+      not honoured by strict mode</strong>: the strict-mode pre-check calls <code>Accept.Compatible()</code>,
+      which only tests media-range matching and ignores the <code>q</code> value
+      (<code class="loc">proactive.go:197</code> &rarr; <code class="loc">media_range.go:141</code>). A
+      representation that matches only a <code>q=0</code> range is counted &ldquo;compatible&rdquo; and passes
+      strict mode (D6). Relatedly, <code>Accept-Encoding</code> has no strict mode at all
+      (<code class="loc">proactive_options.go</code>), and the <code>identity</code> coding is not treated as
+      always-acceptable the way RFC&nbsp;9110 &sect;12.5.3 requires (D8).</p>
+
+    <blockquote>
+      <p>RFC&nbsp;9110 &sect;12.4.2: &ldquo;A sender of qvalue MUST NOT generate more than three digits after the
+        decimal point. &hellip; a quality value of 0 means &lsquo;not acceptable&rsquo;.&rdquo;</p>
+    </blockquote>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="reactive">
+    <h2><span class="num">06</span>Reactive (agent-driven) negotiation</h2>
+    <p class="ref">RFC&nbsp;7231 &sect;3.4.2 / RFC&nbsp;9110 &sect;12.2 &amp; &sect;15.4.1 &middot; source:
+      <code>reactive/reactive.go</code></p>
+    <p>The reactive negotiator is intentionally thin: it serializes a <code>List</code> representation describing
+      every available variant and returns it with <code>300 Multiple Choices</code>. That is the canonical
+      agent-driven behaviour &mdash; the server hands the client the menu and lets the client choose &mdash; and
+      the strategy is essentially conformant.</p>
+    <p>The gaps are minor (D10&ndash;D11): the <code>300</code> response carries no <code>Location</code> header
+      pointing at a preferred default (RFC&nbsp;9110 &sect;15.4.1 says it <em>SHOULD</em> when one exists), no
+      <code>Vary</code>, and the metrics double-count &mdash; the deferred counter increments
+      <code>negotiate.multiple_choices</code> on <em>every</em> non-error return, including the empty-set path
+      that has already incremented <code>negotiate.no_content</code> and written <code>204</code>
+      (<code class="loc">reactive.go:96-110</code>).</p>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="transparent">
+    <h2><span class="num">07</span>Transparent negotiation</h2>
+    <p class="ref">RFC&nbsp;2295 (protocol) + RFC&nbsp;2296 (RVSA/1.0) &middot; source:
+      <code>transparent/transparent.go</code>, <code>transparent/rvsa.go</code>,
+      <code>internal/header/{negotiate,alternates,tcn,accept_features,feature_*}.go</code></p>
+
+    <p>This is the most impressive &mdash; and the most exposed &mdash; part of the library. It reads the
+      <code>Negotiate</code> request header, decides whether the user agent wants the server to choose
+      (<code>*</code>, <code>1.0</code>, or <code>guess-small</code>), runs RVSA/1.0 to compute an overall
+      quality per variant, and then either returns a <code>choice</code> response (when a single
+      &ldquo;definite&rdquo; best variant exists and is a URL <em>neighbour</em> of the negotiable resource) or a
+      <code>list</code> response carrying <code>Alternates</code> and <code>TCN</code> headers.</p>
+
+    <h3>What it gets right <span class="badge b-ok">Conformant</span></h3>
+    <ul class="tight">
+      <li><strong>Overall-quality computation</strong> &mdash; <code>qs &times; qt &times; qc &times; ql &times; qf</code>,
+        rounded to five decimal places (<code class="loc">rvsa.go:215-224</code>), matching RFC&nbsp;2296 &sect;3.3
+        exactly (and notably <em>more</em> faithfully than Apache, which skips the rounding).</li>
+      <li><strong>Definiteness gate</strong> &mdash; a choice response is only produced when no dimension relied on
+        a wildcard or an absent request header (<code>IsDefinite</code>, <code class="loc">rvsa.go:84,111</code>),
+        the correct reading of &ldquo;the server may only return a choice it is certain about.&rdquo;</li>
+      <li><strong>Neighbour test</strong> &mdash; the chosen variant&rsquo;s <code>Content-Location</code> must share
+        the negotiable resource&rsquo;s parent path (RFC&nbsp;2296 &sect;3.5), with RFC&nbsp;2068 URL equivalence
+        (<code class="loc">transparent.go:182-237</code>).</li>
+      <li><strong><code>guess-small</code></strong> &mdash; falls back to a list when the choice body is not smaller
+        than, and is more than the threshold larger than, the list body (<code class="loc">transparent.go:158-179</code>).</li>
+    </ul>
+
+    <h3>Where it diverges</h3>
+    <p>The notable issues (D12, D15&ndash;D16, D18&ndash;D19) are wire-format and robustness:</p>
+    <ul class="tight">
+      <li><strong>Malformed <code>Alternates</code> attributes</strong> (D12). <code>NewAlternates</code> emits
+        <em>every</em> variant attribute unconditionally, so a variant with no charset/language/features yields
+        empty tokens like <code>{ charset&nbsp;&nbsp;}</code> and <code>{ language&nbsp;&nbsp;}</code>
+        (<code class="loc">alternates.go:113-122</code>). RFC&nbsp;2295 &sect;8.3 makes each variant-attribute
+        optional; it should be omitted when empty, not emitted blank.</li>
+      <li><strong>A parse error becomes a panic</strong> (D15). If a variant&rsquo;s feature list fails to parse
+        during selection, RVSA calls <code>panic(err)</code> (<code class="loc">rvsa.go:205-208</code>) instead of
+        returning the error the <code>Chooser</code> signature already provides &mdash; a single bad variant takes
+        down the request handler.</li>
+      <li><strong>Encoding dropped from RVSA</strong> (D18). The <code>Accept-Encoding</code> dimension is stubbed
+        out (<code class="loc">rvsa.go:42-59</code>). RVSA/1.0 itself does not define an encoding factor, so this is
+        defensible, but it means transparent selection ignores encoding entirely.</li>
+      <li><strong>Feature quality is unbounded</strong> (D16). <code>QualityDegradation</code> multiplies
+        true-improvement factors that may exceed 1.0 and feeds the raw product straight into
+        <code>header.QualityValue</code>, bypassing the <code>0.0&ndash;1.0</code> validation in
+        <code>NewQualityValue</code> (<code class="loc">feature_list.go:47-57</code>, <code class="loc">rvsa.go:209-212</code>),
+        so overall quality can rise above 1.0.</li>
+      <li><strong>No <code>506 Variant Also Negotiates</strong></code> (D17) &mdash; the configuration-error status
+        from RFC&nbsp;2295 &sect;8.1 is never produced.</li>
+    </ul>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="crosscutting">
+    <h2><span class="num">08</span>Cross-cutting issues</h2>
+    <p>Three problems are independent of strategy because they touch every response the library writes.</p>
+
+    <h3>No <code>Vary</code> header, anywhere</h3>
+    <p>For proactive (and indeed transparent) negotiation, RFC&nbsp;9110 &sect;12.5.5 states the server
+      <em>SHOULD</em> generate a <code>Vary</code> field listing the request-header fields that influenced
+      selection, so that shared caches key their stored responses correctly. The library sets
+      <code>Content-*</code> fields but never <code>Vary</code> (<code class="loc">proactive.go:270-275, 344-348</code>;
+      <code class="loc">reactive.go:130-134</code>; <code class="loc">transparent.go:275-281, 338-345</code>). A cache
+      in front of an application using this library will happily serve a French, gzip&rsquo;d variant to a client
+      that asked for English plaintext.</p>
+
+    <h3>The phantom <code>Content-Charset</code> header</h3>
+    <p>Every response path writes <code>ctx.ResponseWriter.Header().Add("Content-Charset", cc)</code>. There is no
+      <code>Content-Charset</code> field in HTTP. The selected charset must be conveyed as the <code>charset</code>
+      parameter of <code>Content-Type</code> (e.g. <code>Content-Type: application/json; charset=utf-8</code>).
+      Clients and caches ignore the bogus field, and the actually-negotiated charset is therefore never
+      communicated.</p>
+
+    <h3>Built against an obsoleted RFC</h3>
+    <p>The code, comments, and README cite RFC&nbsp;7231 and link to <code>tools.ietf.org</code>. RFC&nbsp;7231 was
+      obsoleted by RFC&nbsp;9110 in June&nbsp;2022. The negotiation model is largely unchanged, but RFC&nbsp;9110
+      &sect;12.5.2 now marks <code>Accept-Charset</code> as <em>deprecated</em> (&ldquo;servers ought to ignore
+      it&rdquo;; modern stacks assume UTF-8). The library elevates <code>Accept-Charset</code> to a first-class
+      dimension with its own strict mode &mdash; investing conformance effort in a header the current standard is
+      retiring.</p>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="catalog">
+    <h2><span class="num">09</span>Discrepancy catalogue</h2>
+    <p>Twenty findings, grouped by area. IDs are stable so they can be referenced from issues/PRs.</p>
+
+    <h4>Cross-cutting</h4>
+
+    <div class="finding s-high">
+      <div class="head"><span class="id">D1</span><span class="title">No <code>Vary</code> response header</span><span class="badge b-high">High</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;12.5.5 (was RFC&nbsp;7231 &sect;7.1.4)</dd>
+        <dt>Where</dt><dd class="loc">proactive.go:270; reactive.go:130; transparent.go:275,338</dd>
+        <dt>Impact</dt><dd>Negotiated responses are mis-cached by shared/CDN caches; a wrong-language or wrong-encoding variant can be served to the wrong client.</dd>
+        <dt>Fix</dt><dd>Emit <code>Vary: Accept, Accept-Language, Accept-Encoding</code> (and <code>Negotiate</code> for transparent) reflecting the dimensions actually consulted.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-high">
+      <div class="head"><span class="id">D2</span><span class="title">Non-standard <code>Content-Charset</code> header emitted</span><span class="badge b-high">High</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;8.3 (charset is a <code>Content-Type</code> parameter); no <code>Content-Charset</code> field exists</dd>
+        <dt>Where</dt><dd class="loc">proactive.go:275,348; reactive.go:134; transparent.go:281,345</dd>
+        <dt>Impact</dt><dd>The negotiated charset is never actually communicated to the client; an invalid field is sent instead.</dd>
+        <dt>Fix</dt><dd>Append <code>; charset=&lt;cc&gt;</code> to the <code>Content-Type</code> value; drop the <code>Content-Charset</code> writes.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-high">
+      <div class="head"><span class="id">D3</span><span class="title">Implemented against obsoleted RFC&nbsp;7231</span><span class="badge b-high">High</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 obsoletes RFC&nbsp;7231 (June&nbsp;2022)</dd>
+        <dt>Where</dt><dd>README.md; doc comments throughout <code>internal/header</code></dd>
+        <dt>Impact</dt><dd>Currency; and it anchors design decisions (e.g. D4) to retired guidance.</dd>
+        <dt>Fix</dt><dd>Re-cite RFC&nbsp;9110 sections; review behaviour against the current text.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-med">
+      <div class="head"><span class="id">D4</span><span class="title"><code>Accept-Charset</code> treated as first-class despite deprecation</span><span class="badge b-med">Med</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;12.5.2 &mdash; <code>Accept-Charset</code> is deprecated</dd>
+        <dt>Where</dt><dd class="loc">proactive.go:190-226; proactive_options.go (StrictAcceptCharset)</dd>
+        <dt>Impact</dt><dd>Strict-charset mode can return <code>406</code> on a header the standard says to ignore; effort spent on a dead dimension.</dd>
+        <dt>Fix</dt><dd>Default charset strict mode off; document as legacy; lean on UTF-8.</dd>
+      </dl>
+    </div>
+
+    <h4>Proactive</h4>
+
+    <div class="finding s-med">
+      <div class="head"><span class="id">D5</span><span class="title"><code>Accept-Encoding</code> excluded from strict mode</span><span class="badge b-med">Med</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;12.5.3 (Accept-Encoding is a proactive dimension)</dd>
+        <dt>Where</dt><dd class="loc">proactive.go:215-226; proactive_options.go</dd>
+        <dt>Impact</dt><dd>Encoding mismatch is handled only implicitly by the chooser; there is no symmetric strict/406 control as for the other three headers.</dd>
+        <dt>Fix</dt><dd>Add <code>StrictAcceptEncoding</code> with a parallel pre-check.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-med">
+      <div class="head"><span class="id">D6</span><span class="title">Strict-mode compatibility ignores <code>q=0</code></span><span class="badge b-med">Med</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;12.4.2 &mdash; <code>q=0</code> means &ldquo;not acceptable&rdquo;</dd>
+        <dt>Where</dt><dd class="loc">proactive.go:197-213 &rarr; media_range.go:141 (Compatible ignores qValue)</dd>
+        <dt>Impact</dt><dd>A representation matching only a <code>q=0</code> range is counted compatible and passes strict mode; strict-mode <code>406</code> fails to fire (the chooser later corrects most cases, but counters/branch are wrong).</dd>
+        <dt>Fix</dt><dd>Treat a match whose effective qvalue is 0 as incompatible in the strict pre-check.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-med">
+      <div class="head"><span class="id">D7</span><span class="title">Language-mismatched variants eliminated rather than down-weighted</span><span class="badge b-med">Med</span></div>
+      <dl>
+        <dt>Spec</dt><dd>Apache httpd algorithm step&nbsp;3 (non-matching language &rarr; <code>0.001</code>/wildcard, not removal)</dd>
+        <dt>Where</dt><dd class="loc">apache_httpd.go:99-103, 330-348</dd>
+        <dt>Impact</dt><dd>When no variant matches <code>Accept-Language</code>, all are discarded and the server returns <code>406</code>, whereas Apache would serve a best-effort variant.</dd>
+        <dt>Fix</dt><dd>Assign a minimal non-zero language quality on no match instead of <code>QualityValueMinimum</code>.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-med">
+      <div class="head"><span class="id">D8</span><span class="title"><code>identity</code> encoding not always-acceptable</span><span class="badge b-med">Med</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;12.5.3 &mdash; <code>identity</code> is acceptable unless explicitly refused</dd>
+        <dt>Where</dt><dd class="loc">apache_httpd.go:352-367</dd>
+        <dt>Impact</dt><dd>A variant explicitly tagged <code>identity</code> is eliminated when the client sends e.g. <code>Accept-Encoding: gzip</code>, even though identity should remain acceptable. (Untagged variants escape only because they score max.)</dd>
+        <dt>Fix</dt><dd>Special-case <code>identity</code> to maximum quality unless an explicit <code>identity;q=0</code> is present.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-info">
+      <div class="head"><span class="id">D9</span><span class="title">Media-range qvalue precision not bounded to 3 digits</span><span class="badge b-info">Info</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;12.4.2 (&le;3 fractional digits)</dd>
+        <dt>Where</dt><dd class="loc">media_range.go:68-78 (plain <code>ParseFloat</code>)</dd>
+        <dt>Impact</dt><dd>Cosmetic; charset/encoding ranges already enforce <code>{1,3}</code> via regex, media ranges do not.</dd>
+        <dt>Fix</dt><dd>Validate the fractional length, mirroring the charset/coding regex.</dd>
+      </dl>
+    </div>
+
+    <h4>Reactive</h4>
+
+    <div class="finding s-low">
+      <div class="head"><span class="id">D10</span><span class="title"><code>multiple_choices</code> metric double-counts the empty-set path</span><span class="badge b-low">Low</span></div>
+      <dl>
+        <dt>Spec</dt><dd>n/a (internal correctness)</dd>
+        <dt>Where</dt><dd class="loc">reactive.go:96-110</dd>
+        <dt>Impact</dt><dd>An empty representation set increments both <code>negotiate.no_content</code> and <code>negotiate.multiple_choices</code>.</dd>
+        <dt>Fix</dt><dd>Return early / guard the deferred counter so it excludes the <code>204</code> path.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-info">
+      <div class="head"><span class="id">D11</span><span class="title"><code>300</code> carries no <code>Location</code> for a preferred choice</span><span class="badge b-info">Info</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;15.4.1 (<em>SHOULD</em> include <code>Location</code> when a preferred variant exists)</dd>
+        <dt>Where</dt><dd class="loc">reactive.go:121-135</dd>
+        <dt>Impact</dt><dd>Agents get no server hint toward a default variant.</dd>
+        <dt>Fix</dt><dd>Optionally set <code>Location</code> to a server-preferred representation.</dd>
+      </dl>
+    </div>
+
+    <h4>Transparent</h4>
+
+    <div class="finding s-med">
+      <div class="head"><span class="id">D12</span><span class="title">Empty variant-attributes emitted in <code>Alternates</code></span><span class="badge b-med">Med</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;2295 &sect;8.3 / &sect;6.2 &mdash; variant-attributes are optional</dd>
+        <dt>Where</dt><dd class="loc">alternates.go:103-130</dd>
+        <dt>Impact</dt><dd>Produces malformed tokens (<code>{ charset&nbsp;}</code>, <code>{ language&nbsp;}</code>, <code>{ features&nbsp;}</code>) for variants missing those dimensions.</dd>
+        <dt>Fix</dt><dd>Only append an attribute when its value is non-empty.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-med">
+      <div class="head"><span class="id">D15</span><span class="title">RVSA panics on an unparseable feature list</span><span class="badge b-med">Med</span></div>
+      <dl>
+        <dt>Spec</dt><dd>n/a (robustness; the <code>Chooser</code> signature returns <code>error</code>)</dd>
+        <dt>Where</dt><dd class="loc">rvsa.go:194-208</dd>
+        <dt>Impact</dt><dd>A single malformed variant feature string crashes the request goroutine instead of erroring gracefully.</dd>
+        <dt>Fix</dt><dd>Return the error up through <code>acceptFeatureQuality</code> / <code>Choose</code>.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-low">
+      <div class="head"><span class="id">D16</span><span class="title">Feature quality can exceed 1.0 (validation bypassed)</span><span class="badge b-low">Low</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;2295 &sect;6.4 / RFC&nbsp;2296 &sect;3.3 (quality stays in 0&ndash;1)</dd>
+        <dt>Where</dt><dd class="loc">feature_list.go:47-57; rvsa.go:209-212</dd>
+        <dt>Impact</dt><dd>True-improvement factors &gt;1 raise the feature factor and hence overall quality above 1.0; <code>NewQualityValue</code> bounds checks are skipped via a direct cast.</dd>
+        <dt>Fix</dt><dd>Clamp the degradation product (and overall quality) to <code>[0,1]</code>.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-info">
+      <div class="head"><span class="id">D17</span><span class="title"><code>506 Variant Also Negotiates</code> not implemented</span><span class="badge b-info">Info</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;2295 &sect;8.1</dd>
+        <dt>Where</dt><dd>transparent package (absent)</dd>
+        <dt>Impact</dt><dd>A mis-configured variant that is itself negotiable cannot be reported per spec.</dd>
+        <dt>Fix</dt><dd>Detect self-negotiable variants and emit <code>506</code>.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-info">
+      <div class="head"><span class="id">D18</span><span class="title"><code>Accept-Encoding</code> dimension stubbed out of RVSA</span><span class="badge b-info">Info</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;2296 &sect;3.3 (RVSA/1.0 has no encoding factor &mdash; Apache <em>extends</em> it)</dd>
+        <dt>Where</dt><dd class="loc">rvsa.go:42-59 (commented <code>TODO</code>)</dd>
+        <dt>Impact</dt><dd>Transparent selection ignores encoding entirely; defensible under pure RVSA/1.0 but worth documenting.</dd>
+        <dt>Fix</dt><dd>Either document the omission or adopt the Apache encoding extension.</dd>
+      </dl>
+    </div>
+
+    <h4>Header parsing &amp; matching</h4>
+
+    <div class="finding s-med">
+      <div class="head"><span class="id">D14</span><span class="title">Language matching uses confidence-based matcher, not RFC&nbsp;4647 filtering</span><span class="badge b-med">Med</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;9110 &sect;12.5.4 &rarr; RFC&nbsp;4647 &sect;3.3.1 Basic Filtering (prefix match)</dd>
+        <dt>Where</dt><dd class="loc">language_range.go:103-115 (<code>language.NewMatcher</code>/<code>MatchStrings</code>)</dd>
+        <dt>Impact</dt><dd><code>golang.org/x/text</code>&rsquo;s matcher does region/script &ldquo;best match&rdquo; selection; it can match e.g. an <code>en-GB</code> request to an <code>en-US</code> variant where basic prefix filtering would not, diverging from the referenced algorithm.</dd>
+        <dt>Fix</dt><dd>Use basic-filtering prefix semantics, or document the intentional deviation.</dd>
+      </dl>
+    </div>
+
+    <div class="finding s-info">
+      <div class="head"><span class="id">D13</span><span class="title">URL-equivalence test cites obsolete RFC&nbsp;2068</span><span class="badge b-info">Info</span></div>
+      <dl>
+        <dt>Spec</dt><dd>RFC&nbsp;2068/2616 (obsolete) &rarr; URI equivalence now RFC&nbsp;3986 &sect;6</dd>
+        <dt>Where</dt><dd class="loc">transparent.go:181-217</dd>
+        <dt>Impact</dt><dd>Port normalisation hard-codes <code>:80</code> and ignores scheme-default ports (e.g. <code>:443</code> for https), so an https neighbour test can mis-compare.</dd>
+        <dt>Fix</dt><dd>Normalise the default port by scheme per RFC&nbsp;3986.</dd>
+      </dl>
+    </div>
+
+    <h4>Conformance highlights</h4>
+    <div class="finding s-info" style="border-left-color:var(--accent-2)">
+      <div class="head"><span class="id">D19</span><span class="title">Apache 8-step algorithm reproduced faithfully</span><span class="badge b-ok">Conformant</span></div>
+      <dl>
+        <dt>Where</dt><dd class="loc">apache_httpd.go:38-131</dd>
+        <dt>Note</dt><dd>Filters map 1:1 to Apache dimensions 1&ndash;8 with <code>First()</code> as the step-9 tie-break.</dd>
+      </dl>
+    </div>
+    <div class="finding s-info" style="border-left-color:var(--accent-2)">
+      <div class="head"><span class="id">D20</span><span class="title">RVSA overall-quality rounding matches RFC&nbsp;2296</span><span class="badge b-ok">Conformant</span></div>
+      <dl>
+        <dt>Where</dt><dd class="loc">rvsa.go:215-224 (<code>Round(5)</code>)</dd>
+        <dt>Note</dt><dd>Rounds to five decimals before comparison &mdash; the step Apache&rsquo;s own implementation explicitly omits.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="recommendations">
+    <h2><span class="num">10</span>Recommendations</h2>
+    <p>In priority order, the changes that most improve standards conformance per unit of effort:</p>
+    <table>
+      <thead><tr><th>#</th><th>Action</th><th>Addresses</th><th>Effort</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Carry charset in <code>Content-Type; charset=&hellip;</code>; delete <code>Content-Charset</code> writes</td><td>D2</td><td>Low</td></tr>
+        <tr><td>2</td><td>Emit a <code>Vary</code> header reflecting consulted dimensions on every negotiated response</td><td>D1</td><td>Low</td></tr>
+        <tr><td>3</td><td>Omit empty variant-attributes in <code>Alternates</code>; replace the RVSA <code>panic</code> with an error</td><td>D12, D15</td><td>Low</td></tr>
+        <tr><td>4</td><td>Honour <code>q=0</code> in the strict pre-check; treat <code>identity</code> as always-acceptable; down-weight (don&rsquo;t drop) language mismatches</td><td>D6, D7, D8</td><td>Medium</td></tr>
+        <tr><td>5</td><td>Re-base citations on RFC&nbsp;9110; default <code>Accept-Charset</code> strict mode off; add <code>Accept-Encoding</code> strict mode</td><td>D3, D4, D5</td><td>Medium</td></tr>
+        <tr><td>6</td><td>Clamp quality to <code>[0,1]</code>; normalise URL ports by scheme; document/replace the language matcher</td><td>D16, D13, D14</td><td>Medium</td></tr>
+      </tbody>
+    </table>
+    <p>None of these touch the public API surface materially; most are localised to the response-writing helpers
+      and the <code>internal/header</code> package.</p>
+  </section>
+
+  <!-- ============================================================= -->
+  <section id="references">
+    <h2><span class="num">11</span>References</h2>
+    <ul class="tight">
+      <li>RFC&nbsp;9110 &mdash; HTTP Semantics (STD&nbsp;97), &sect;12 Content Negotiation, &sect;8.3 / &sect;12.5.* &mdash;
+        <a href="https://www.rfc-editor.org/rfc/rfc9110.html">rfc-editor.org/rfc/rfc9110</a></li>
+      <li>RFC&nbsp;7231 &mdash; HTTP/1.1 Semantics and Content (obsoleted), &sect;3.4, &sect;5.3 &mdash;
+        <a href="https://www.rfc-editor.org/rfc/rfc7231.html">rfc-editor.org/rfc/rfc7231</a></li>
+      <li>RFC&nbsp;2295 &mdash; Transparent Content Negotiation in HTTP (Experimental) &mdash;
+        <a href="https://www.rfc-editor.org/rfc/rfc2295.html">rfc-editor.org/rfc/rfc2295</a></li>
+      <li>RFC&nbsp;2296 &mdash; HTTP Remote Variant Selection Algorithm: RVSA/1.0 (Experimental) &mdash;
+        <a href="https://www.rfc-editor.org/rfc/rfc2296.html">rfc-editor.org/rfc/rfc2296</a></li>
+      <li>RFC&nbsp;4647 &mdash; Matching of Language Tags (BCP&nbsp;47) &mdash;
+        <a href="https://www.rfc-editor.org/rfc/rfc4647.html">rfc-editor.org/rfc/rfc4647</a></li>
+      <li>RFC&nbsp;3986 &mdash; URI Generic Syntax, &sect;6 Normalization and Comparison &mdash;
+        <a href="https://www.rfc-editor.org/rfc/rfc3986.html">rfc-editor.org/rfc/rfc3986</a></li>
+      <li>Apache HTTP Server 2.4 &mdash; Content Negotiation (the negotiation algorithm) &mdash;
+        <a href="https://httpd.apache.org/docs/2.4/content-negotiation.html">httpd.apache.org/docs/2.4/content-negotiation.html</a></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <p>Generated for <b>github.com/freerware/negotiator</b> @ <code>d4cf974</code> on 2026-06-20. This is a
+    self-contained, regenerable report &mdash; styling and content are embedded, no network or build step is
+    required to render it. Findings are advisory and reflect a static reading of the source against the cited
+    specifications.</p>
+</footer>
+
+</body>
+</html>
